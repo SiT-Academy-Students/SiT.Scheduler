@@ -55,6 +55,7 @@ namespace SiT.Scheduler.Data.Repositories
             try
             {
                  var result = await this._schedulerDbContext.FindAsync<IEntity>(filter, cancellationToken);
+                operationResult.Data = result;
             }
             catch(Exception e)
             {
@@ -75,6 +76,7 @@ namespace SiT.Scheduler.Data.Repositories
             try
             {
                 var result = await this._schedulerDbContext.FindAsync<IEnumerable<IEntity>>(filter, cancellationToken);
+                operationResult.Data = result;
             }
             catch (Exception e)
             {
