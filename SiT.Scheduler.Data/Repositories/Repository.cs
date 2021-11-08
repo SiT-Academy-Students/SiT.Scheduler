@@ -1,6 +1,7 @@
 ﻿namespace SiT.Scheduler.Data.Repositories
 {
     using SiT.Scheduler.Data.Contracts.Repositories;
+    using SiT.Scheduler.Data.Contracts.Models;
     using SiT.Scheduler.Utilitites.Errors;
     using SiT.Scheduler.Utilitites.OperationResults;
     using System;
@@ -8,6 +9,8 @@
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
+    using SiT.Scheduler.Data.Models;
+    using System.Linq;
 
     public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : class
@@ -51,9 +54,26 @@
             throw new NotImplementedException();
         }
 
-        public Task<IOperationResult> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
+        public async Task<IOperationResult> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var operationResult = new OperationResult();
+
+            operationResult.ValidateNotNull(entity);
+            if (operationResult.IsSuccessful is false)
+                return operationResult;
+
+            try
+            {
+                this._schedulerDbContext.Update(entity);
+                await this._schedulerDbContext.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                var error = new ErrorFromException(e);
+                operationResult.AddError(error);
+            }
+
+            return operationResult;
         }
     }
 }
