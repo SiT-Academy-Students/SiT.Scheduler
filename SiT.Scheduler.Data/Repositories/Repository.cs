@@ -1,4 +1,4 @@
-﻿using SiT.Scheduler.Data.Contracts.Models;
+using SiT.Scheduler.Data.Contracts.Models;
 using SiT.Scheduler.Data.Contracts.Repositories;
 using SiT.Scheduler.Utilities;
 using SiT.Scheduler.Utilities.Errors;
@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace SiT.Scheduler.Data.Repositories
 {
-    public class Repository<TEntity> : IRepository<IEntity>
-       where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity>
+        where TEntity : class
     {
         private readonly SchedulerDbContext _schedulerDbContext;
 
@@ -85,12 +85,28 @@ namespace SiT.Scheduler.Data.Repositories
             }
 
             return operationResult;
-
         }            
 
-        public Task<IOperationResult> UpdateAsync(IEntity entity, CancellationToken cancellationToken)
+        public async Task<IOperationResult> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var operationResult = new OperationResult();
+
+            operationResult.ValidateNotNull(entity);
+            if (operationResult.IsSuccessful is false)
+                return operationResult;
+
+            try
+            {
+                this._schedulerDbContext.Update(entity);
+                await this._schedulerDbContext.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                var error = new ErrorFromException(e);
+                operationResult.AddError(error);
+            }
+
+            return operationResult;
         }
     }
 }
