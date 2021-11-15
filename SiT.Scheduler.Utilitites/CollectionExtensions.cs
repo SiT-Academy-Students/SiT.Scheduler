@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace SiT.Scheduler.Utilitites
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public static class CollectionExtensions
     {
         public static IEnumerable<T> OrEmptyIfNull<T>(this IEnumerable<T> collection)
