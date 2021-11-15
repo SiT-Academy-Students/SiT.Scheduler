@@ -13,7 +13,7 @@ namespace SiT.Scheduler.Data.PostgreSql
         public PostgreDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<PostgreDbContext>();
-            optionsBuilder.UseSqlServer(Console.ReadLine());
+            optionsBuilder.UseNpgsql(args[0]);
 
             return new PostgreDbContext(optionsBuilder.Options);
         }
