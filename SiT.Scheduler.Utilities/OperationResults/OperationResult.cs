@@ -1,17 +1,16 @@
-﻿namespace SiT.Scheduler.Utilitites.OperationResults
+﻿namespace SiT.Scheduler.Utilities.OperationResults
 {
-    using SiT.Scheduler.Utilitites.Errors;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using SiT.Scheduler.Utilities.Errors;
 
     public class OperationResult : IOperationResult
     {
-        private List<IError> _errors = new List<IError>();
+        private readonly List<IError> _errors = new();
 
         public IReadOnlyCollection<IError> Errors => this._errors.AsReadOnly();
 
-        public bool IsSuccessful => this.Errors.Any() == false;
+        public bool IsSuccessful => !this.Errors.Any();
 
         public bool AddError(IError error)
         {

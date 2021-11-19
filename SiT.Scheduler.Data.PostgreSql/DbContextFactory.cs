@@ -1,6 +1,7 @@
 ﻿namespace SiT.Scheduler.Data.PostgreSql
 {
     using System;
+    using System.Linq;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
 
@@ -9,7 +10,7 @@
         public PostgreDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<PostgreDbContext>();
-            if (string.IsNullOrWhiteSpace(args[0]) || args.Length < 1 || args is null)
+            if (args is null || !args.Any() || string.IsNullOrWhiteSpace(args[0]))
                 throw new InvalidOperationException("Please provide a valid connection string.");
 
             optionsBuilder.UseNpgsql(args[0]);

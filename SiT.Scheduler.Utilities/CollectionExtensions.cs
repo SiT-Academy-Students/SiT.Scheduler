@@ -1,4 +1,4 @@
-namespace SiT.Scheduler.Utilitites
+namespace SiT.Scheduler.Utilities
 {
     using System;
     using System.Collections.Generic;
@@ -15,6 +15,6 @@ namespace SiT.Scheduler.Utilitites
 
         public static IEnumerable<T> IgnoreDefaultValues<T>(this IEnumerable<T> collection)
             where T : struct, IEquatable<T>
-            => collection.Where(el => el.Equals(default) == false);
+            => collection.Where(el => !el.Equals(default));
     }
 }

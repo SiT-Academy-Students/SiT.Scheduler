@@ -6,8 +6,8 @@
     using System.Threading;
     using System.Threading.Tasks;
     using SiT.Scheduler.Data.Contracts.Repositories;
-    using SiT.Scheduler.Utilitites.Errors;
-    using SiT.Scheduler.Utilitites.OperationResults;
+    using SiT.Scheduler.Utilities.Errors;
+    using SiT.Scheduler.Utilities.OperationResults;
 
     public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : class

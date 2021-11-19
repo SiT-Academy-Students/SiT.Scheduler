@@ -1,8 +1,7 @@
 namespace SiT.Scheduler.Tests
 {
-    using SiT.Scheduler.Utilitites;
-    using SiT.Scheduler.Utilitites.Errors;
-    using SiT.Scheduler.Utilitites.OperationResults;
+    using SiT.Scheduler.Utilities.Errors;
+    using SiT.Scheduler.Utilities.OperationResults;
     using Xunit;
 
     public class OperationResultTests
