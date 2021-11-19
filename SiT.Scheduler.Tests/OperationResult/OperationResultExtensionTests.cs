@@ -1,5 +1,6 @@
 ﻿namespace SiT.Scheduler.Tests.OperationResult
 {
+    using System;
     using SiT.Scheduler.Utilities.Errors;
     using SiT.Scheduler.Utilities.OperationResults;
     using TryAtSoftware.Randomizer.Core.Helpers;
@@ -7,6 +8,13 @@
 
     public class OperationResultExtensionTests
     {
+        [Fact]
+        public void ValidatingNullabilityShouldThrowIfTheOperationResultIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => OperationResultExtensions.ValidateNotNull<object>(null, null));
+            Assert.Throws<ArgumentNullException>(() => OperationResultExtensions.ValidateNotNull(null, new object()));
+        }
+
         [Fact]
         public void ValidatingNullabilityShouldWorkCorrectlyWhenValueIsNull()
         {
