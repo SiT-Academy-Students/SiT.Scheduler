@@ -16,7 +16,7 @@ namespace SiT.Scheduler.Tests
         }
 
         [Fact]
-        public void OperationresultShouldBeUnsuccessfulWhenErrorsAreAdded()
+        public void OperationResultShouldBeUnsuccessfulWhenErrorsAreAdded()
         {
             // Arrange
             var operationResult = new OperationResult();
@@ -45,11 +45,9 @@ namespace SiT.Scheduler.Tests
         [InlineData(2)]
         [InlineData(3)]
         [InlineData(4)]
-        public void OperationResultShouldStoreDataCorreclty(int data)
+        public void OperationResultShouldStoreDataCorrectly(int data)
         {
-            var operationResult = new OperationResult<int>();
-            operationResult.Data = data;
-
+            var operationResult = new OperationResult<int> { Data = data };
             Assert.Equal(operationResult.Data, data);
         }
     }
