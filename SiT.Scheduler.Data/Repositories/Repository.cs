@@ -1,20 +1,16 @@
-﻿
-
-namespace SiT.Scheduler.Data.Repositories
+﻿namespace SiT.Scheduler.Data.Repositories
 {
-using SiT.Scheduler.Data.Contracts.Models;
-using SiT.Scheduler.Data.Contracts.Repositories;
-using SiT.Scheduler.Utilitites.Errors;
-using SiT.Scheduler.Utilitites.OperationResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using SiT.Scheduler.Data.Contracts.Repositories;
+    using SiT.Scheduler.Utilitites.Errors;
+    using SiT.Scheduler.Utilitites.OperationResults;
+
     public class Repository<TEntity> : IRepository<TEntity>
-       where TEntity : class
+        where TEntity : class
     {
         private readonly SchedulerDbContext _schedulerDbContext;
 
@@ -85,7 +81,6 @@ using System.Threading.Tasks;
             }
 
             return operationResult;
-
         }
 
         public async Task<IOperationResult> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
@@ -111,4 +106,3 @@ using System.Threading.Tasks;
         }
     }
 }
-

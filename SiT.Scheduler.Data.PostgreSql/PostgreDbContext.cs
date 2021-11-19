@@ -1,13 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SiT.Scheduler.Data.PostgreSql
+﻿namespace SiT.Scheduler.Data.PostgreSql
 {
-    class PostgreDbContext : SchedulerDbContext
+    using Microsoft.EntityFrameworkCore;
+
+    public class PostgreDbContext : SchedulerDbContext
     {
         public PostgreDbContext(DbContextOptions<PostgreDbContext> options)
         {
