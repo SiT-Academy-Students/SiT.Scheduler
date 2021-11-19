@@ -1,4 +1,4 @@
-﻿namespace SiT.Scheduler.Utilitites.Errors
+﻿namespace SiT.Scheduler.Utilities.Errors
 {
     public class ArgumentNullError : IError
     {

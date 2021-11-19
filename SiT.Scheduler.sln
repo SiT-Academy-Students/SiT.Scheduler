@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Docs.md = Docs.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.Utilitites", "SiT.Scheduler.Utilitites\SiT.Scheduler.Utilitites.csproj", "{632FA370-64C0-4806-9D73-897C5A9E28D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.Utilities", "SiT.Scheduler.Utilities\SiT.Scheduler.Utilities.csproj", "{632FA370-64C0-4806-9D73-897C5A9E28D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6EE2B220-0C99-47E9-832A-6DEC6D7D4538}"
 EndProject

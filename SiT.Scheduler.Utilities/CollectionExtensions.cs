@@ -1,4 +1,4 @@
-namespace SiT.Scheduler.Utilitites
+namespace SiT.Scheduler.Utilities
 {
     using System;
     using System.Collections.Generic;
@@ -11,10 +11,20 @@ namespace SiT.Scheduler.Utilitites
 
         public static IEnumerable<T> IgnoreNullValues<T>(this IEnumerable<T> collection)
             where T : class
-            => collection.Where(el => el is not null);
+        {
+            if (collection is null)
+                throw new ArgumentNullException(nameof(collection));
+
+            return collection.Where(el => el is not null);
+        }
 
         public static IEnumerable<T> IgnoreDefaultValues<T>(this IEnumerable<T> collection)
             where T : struct, IEquatable<T>
-            => collection.Where(el => el.Equals(default) == false);
+        {
+            if (collection is null)
+                throw new ArgumentNullException(nameof(collection));
+
+            return collection.Where(el => !el.Equals(default));
+        }
     }
 }

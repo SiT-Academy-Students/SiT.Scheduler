@@ -1,7 +1,7 @@
-﻿namespace SiT.Scheduler.Utilitites.OperationResults
+﻿namespace SiT.Scheduler.Utilities.OperationResults
 {
-    using SiT.Scheduler.Utilitites.Errors;
     using System.Collections.Generic;
+    using SiT.Scheduler.Utilities.Errors;
 
     public interface IOperationResult
     {
@@ -11,7 +11,7 @@
         bool AddError(IError error);
     }
 
-    public interface IOperationResult<T> : IOperationResult
+    public interface IOperationResult<out T> : IOperationResult
     {
         T Data { get; }
     }

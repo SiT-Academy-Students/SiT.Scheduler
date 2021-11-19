@@ -1,8 +1,8 @@
-﻿using SiT.Scheduler.Utilitites.Errors;
-using System;
-
-namespace SiT.Scheduler.Utilitites.OperationResults
+﻿namespace SiT.Scheduler.Utilities.OperationResults
 {
+    using System;
+    using SiT.Scheduler.Utilities.Errors;
+
     public static class OperationResultExtensions
     {
         public static void ValidateNotNull<T>(this IOperationResult operationResult, T data, IError error = null)
