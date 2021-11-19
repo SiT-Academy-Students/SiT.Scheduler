@@ -1,7 +1,8 @@
-namespace SiT.Scheduler.Tests
+namespace SiT.Scheduler.Tests.OperationResult
 {
     using SiT.Scheduler.Utilities.Errors;
     using SiT.Scheduler.Utilities.OperationResults;
+    using TryAtSoftware.Randomizer.Core.Helpers;
     using Xunit;
 
     public class OperationResultTests
@@ -20,7 +21,7 @@ namespace SiT.Scheduler.Tests
         {
             // Arrange
             var operationResult = new OperationResult();
-            var standardError = new StandardError("error");
+            var standardError = new StandardError(RandomizationHelper.GetRandomString());
 
             // Act
             var addSuccess = operationResult.AddError(standardError);
