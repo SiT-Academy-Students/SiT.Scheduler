@@ -5,4 +5,8 @@
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.32.0.39516" PrivateAssets="all"/>
+    </ItemGroup>
+
 </Project>
