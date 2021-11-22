@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EntityDoesNotExist" xml:space="preserve">
+    <value>Обектът не съществува.</value>
+  </data>
+  <data name="FileOrDirectoryNotFound" xml:space="preserve">
+    <value>Не е намерен файлът или директорията.</value>
+  </data>
   <data name="IndexIsOutOfRange" xml:space="preserve">
     <value>Индексът е извън границите на обекта.</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="InvalidOperation" xml:space="preserve">
+    <value>Операцията е невалидна.</value>
+  </data>
+  <data name="ValueIsNull" xml:space="preserve">
+    <value>Стойността е празна.</value>
+  </data>
+  <data name="WrongFormat" xml:space="preserve">
+    <value>Аргументът няма правилен формат.</value>
   </data>
 </root>
