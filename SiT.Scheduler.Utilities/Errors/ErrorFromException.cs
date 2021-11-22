@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SiT.Scheduler.Utilitites.Errors
+namespace SiT.Scheduler.Utilities.Errors
 {
+    using System;
+
     public class ErrorFromException : IError
     {
         private readonly Exception _exception;

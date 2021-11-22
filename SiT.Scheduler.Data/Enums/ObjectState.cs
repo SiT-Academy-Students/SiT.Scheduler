@@ -6,6 +6,5 @@
         Inactive,
         Archived,
         Obsolete
-        Obsolete
     }
 }

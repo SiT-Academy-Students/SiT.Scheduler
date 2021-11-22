@@ -1,11 +1,11 @@
 ﻿namespace SiT.Scheduler.Data.Contracts.Repositories
 {
-    using SiT.Scheduler.Utilitites.OperationResults;
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
+    using SiT.Scheduler.Utilities.OperationResults;
 
     public interface IRepository<TEntity>
         where TEntity : class
