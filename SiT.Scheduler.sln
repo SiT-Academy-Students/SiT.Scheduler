@@ -17,7 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6EE2B220
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.Tests", "SiT.Scheduler.Tests\SiT.Scheduler.Tests.csproj", "{8E76D4D0-D75A-4379-93E3-BDE5FFDC9FB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiT.Scheduler.Data.PostgreSql", "SiT.Scheduler.Data.PostgreSql\SiT.Scheduler.Data.PostgreSql.csproj", "{78E88FE4-F201-48DD-A9DB-037512F253AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.Data.PostgreSql", "SiT.Scheduler.Data.PostgreSql\SiT.Scheduler.Data.PostgreSql.csproj", "{78E88FE4-F201-48DD-A9DB-037512F253AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.Resources", "SiT.Scheduler.Resources\SiT.Scheduler.Resources.csproj", "{3D08270D-D0B4-42AD-B359-B0794230A3B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiT.Scheduler.Resources.Tests", "SiT.Scheduler.Resources.Tests\SiT.Scheduler.Resources.Tests.csproj", "{4216CB68-F878-4425-9198-26A88270EE1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,12 +45,21 @@ Global
 		{78E88FE4-F201-48DD-A9DB-037512F253AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E88FE4-F201-48DD-A9DB-037512F253AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E88FE4-F201-48DD-A9DB-037512F253AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D08270D-D0B4-42AD-B359-B0794230A3B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D08270D-D0B4-42AD-B359-B0794230A3B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D08270D-D0B4-42AD-B359-B0794230A3B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D08270D-D0B4-42AD-B359-B0794230A3B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4216CB68-F878-4425-9198-26A88270EE1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4216CB68-F878-4425-9198-26A88270EE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4216CB68-F878-4425-9198-26A88270EE1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4216CB68-F878-4425-9198-26A88270EE1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8E76D4D0-D75A-4379-93E3-BDE5FFDC9FB6} = {6EE2B220-0C99-47E9-832A-6DEC6D7D4538}
+		{4216CB68-F878-4425-9198-26A88270EE1A} = {6EE2B220-0C99-47E9-832A-6DEC6D7D4538}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {71AE1BC8-E27C-4B6E-965B-02A53F688A19}
