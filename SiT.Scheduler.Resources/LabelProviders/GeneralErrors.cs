@@ -1,4 +1,4 @@
-namespace SiT.Scheduler.Resources
+namespace SiT.Scheduler.Resources.LabelProviders
 {
     using System.Resources;
 

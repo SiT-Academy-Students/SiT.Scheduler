@@ -2,27 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using SiT.Scheduler.Utilities.Errors;
     using TryAtSoftware.Randomizer.Core.Helpers;
     using Xunit;
-    using Xunit.Abstractions;
 
     public class ErrorTests
     {
-        private readonly ITestOutputHelper output;
-
-        public ErrorTests(ITestOutputHelper output)
-        {
-            this.output = output ?? throw new ArgumentNullException(nameof(output));
-        }
-
         [Theory]
         [MemberData(nameof(ConstructAllErrors))]
         public void GeneralErrors(Type errorType, object[] args)
         {
-            this.output.WriteLine($"Current culture: {CultureInfo.CurrentUICulture.Name}");
-            Console.WriteLine($"Current culture: {CultureInfo.CurrentUICulture.Name}");
             var instantiatedError = Activator.CreateInstance(errorType, args);
             var error = Assert.IsAssignableFrom<IError>(instantiatedError);
             Assert.NotNull(error.ErrorMessage);

@@ -1,6 +1,6 @@
-namespace SiT.Scheduler.Utilities.Errors
+﻿namespace SiT.Scheduler.Utilities.Errors
 {
-    using SiT.Scheduler.Resources;
+    using SiT.Scheduler.Resources.LabelProviders;
 
     public class ArgumentNullError : IError
     {

@@ -10,11 +10,23 @@ namespace SiT.Scheduler.Resources.Tests
         [Theory]
         [InlineData("en")]
         [InlineData("bg")]
-        public void AllLabelsShouldReturnValue(string cultureIdentifier)
+        public void AllLabelsShouldReturnValueWithSpecificCulture(string cultureIdentifier)
         {
             var cultureInfo = CultureInfo.GetCultureInfo(cultureIdentifier);
             CultureInfo.CurrentUICulture = cultureInfo;
             
+            ValidateLabelsInternally();
+        }
+
+        [Fact]
+        public void AllLabelsShouldReturnValueWithInvariantCulture()
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
+            ValidateLabelsInternally();
+        }
+
+        private static void ValidateLabelsInternally()
+        {
             var attributeType = typeof(LabelsProviderAttribute);
             var providersAssembly = attributeType.Assembly;
 
