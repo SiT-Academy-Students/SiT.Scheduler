@@ -21,8 +21,8 @@
         [MemberData(nameof(ConstructAllErrors))]
         public void GeneralErrors(Type errorType, object[] args)
         {
-            this.output.WriteLine(CultureInfo.CurrentUICulture.Name);
-            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
+            this.output.WriteLine($"Current culture: {CultureInfo.CurrentUICulture.Name}");
+            Console.WriteLine($"Current culture: {CultureInfo.CurrentUICulture.Name}");
             var instantiatedError = Activator.CreateInstance(errorType, args);
             var error = Assert.IsAssignableFrom<IError>(instantiatedError);
             Assert.NotNull(error.ErrorMessage);
