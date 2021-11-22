@@ -120,9 +120,6 @@
   <data name="EntityDoesNotExist" xml:space="preserve">
     <value>Обектът не съществува.</value>
   </data>
-  <data name="FileOrDirectoryNotFound" xml:space="preserve">
-    <value>Не е намерен файлът или директорията.</value>
-  </data>
   <data name="IndexIsOutOfRange" xml:space="preserve">
     <value>Индексът е извън границите на обекта.</value>
   </data>
