@@ -6,13 +6,22 @@
     using SiT.Scheduler.Utilities.Errors;
     using TryAtSoftware.Randomizer.Core.Helpers;
     using Xunit;
+    using Xunit.Abstractions;
 
     public class ErrorTests
     {
+        private readonly ITestOutputHelper output;
+
+        public ErrorTests(ITestOutputHelper output)
+        {
+            this.output = output ?? throw new ArgumentNullException(nameof(output));
+        }
+
         [Theory]
         [MemberData(nameof(ConstructAllErrors))]
         public void GeneralErrors(Type errorType, object[] args)
         {
+            this.output.WriteLine(CultureInfo.CurrentUICulture.Name);
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
             var instantiatedError = Activator.CreateInstance(errorType, args);
             var error = Assert.IsAssignableFrom<IError>(instantiatedError);
