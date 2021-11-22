@@ -16,14 +16,12 @@ namespace SiT.Scheduler.Resources.Tests
             CultureInfo.CurrentUICulture = cultureInfo;
             
             var attributeType = typeof(LabelsProviderAttribute);
-            var labelsProvidersAssembly = attributeType.Assembly;
+            var providersAssembly = attributeType.Assembly;
 
-            var labelsProviderTypes = labelsProvidersAssembly.GetTypes().Where(t => t.IsDefined(attributeType, inherit: false));
-            foreach (var type in labelsProviderTypes)
+            var providerTypes = providersAssembly.GetTypes().Where(t => t.IsDefined(attributeType, inherit: false));
+            foreach (var type in providerTypes)
             {
-                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Static)
-                    .Where(p => p.PropertyType == typeof(string));
-
+                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Static).Where(p => p.PropertyType == typeof(string));
                 foreach (var property in properties)
                 {
                     var label = (string)property.GetValue(null);

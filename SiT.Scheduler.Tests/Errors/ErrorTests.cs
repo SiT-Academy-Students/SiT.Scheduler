@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using SiT.Scheduler.Utilities.Errors;
     using TryAtSoftware.Randomizer.Core.Helpers;
     using Xunit;
@@ -12,6 +13,7 @@
         [MemberData(nameof(ConstructAllErrors))]
         public void GeneralErrors(Type errorType, object[] args)
         {
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
             var instantiatedError = Activator.CreateInstance(errorType, args);
             var error = Assert.IsAssignableFrom<IError>(instantiatedError);
             Assert.NotNull(error.ErrorMessage);
