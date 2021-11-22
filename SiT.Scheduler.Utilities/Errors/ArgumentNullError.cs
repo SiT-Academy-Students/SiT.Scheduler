@@ -1,9 +1,9 @@
-using SiT.Scheduler.Resources;
-
 namespace SiT.Scheduler.Utilities.Errors
 {
+    using SiT.Scheduler.Resources;
+
     public class ArgumentNullError : IError
     {
-        public string ErrorMessage => GeneralErrors.;
+        public string ErrorMessage => GeneralErrors.ValueIsNull;
     }
 }
