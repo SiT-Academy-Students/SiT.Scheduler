@@ -120,9 +120,6 @@
   <data name="EntityDoesNotExist" xml:space="preserve">
     <value>The entity does not exist.</value>
   </data>
-  <data name="FileOrDirectoryNotFound" xml:space="preserve">
-    <value>The file or directory is not found.</value>
-  </data>
   <data name="IndexIsOutOfRange" xml:space="preserve">
     <value>The index is out of range.</value>
   </data>
