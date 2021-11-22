@@ -10,7 +10,7 @@ namespace SiT.Scheduler.Resources.Tests
         [Theory]
         [InlineData("en")]
         [InlineData("bg")]
-        public void EntityDoesNotExistShouldReturnValue(string cultureIdentifier)
+        public void AllLabelsShouldReturnValue(string cultureIdentifier)
         {
             var cultureInfo = CultureInfo.GetCultureInfo(cultureIdentifier);
             CultureInfo.CurrentUICulture = cultureInfo;
