@@ -17,7 +17,7 @@ public class PostgreSqlTestDatabaseProvider : BaseTestDatabaseProvider
         serviceCollection.AddDbContext<SchedulerDbContext, PostgreSchedulerDbContext>(
             optionsBuilder =>
             {
-                this.SetupDbContextOptions(optionsBuilder);
+                SetupDbContextOptions(optionsBuilder);
                 AddLogging(optionsBuilder, testOutputHelper);
             });
     }
@@ -25,11 +25,11 @@ public class PostgreSqlTestDatabaseProvider : BaseTestDatabaseProvider
     protected override SchedulerDbContext InitializeDbContext()
     {
         var optionsBuilder = new DbContextOptionsBuilder<PostgreSchedulerDbContext>();
-        this.SetupDbContextOptions(optionsBuilder);
+        SetupDbContextOptions(optionsBuilder);
         return new PostgreSchedulerDbContext(optionsBuilder.Options);
     }
 
-    private void SetupDbContextOptions(DbContextOptionsBuilder optionsBuilder)
+    private static void SetupDbContextOptions(DbContextOptionsBuilder optionsBuilder)
     {
         Assert.NotNull(optionsBuilder);
         optionsBuilder.UseNpgsql("Host=localhost;Database=SchedulerTests;Username=scheduler_tests_user;Password=\"123456-Aa\"");
