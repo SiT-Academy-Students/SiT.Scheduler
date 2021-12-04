@@ -1,7 +1,6 @@
-﻿namespace SiT.Scheduler.Utilities.Errors
+namespace SiT.Scheduler.Utilities.Errors;
+
+public interface IError
 {
-    public interface IError
-    {
-        string ErrorMessage {get;}
-    }
+    string ErrorMessage { get; }
 }

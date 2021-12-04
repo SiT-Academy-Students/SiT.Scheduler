@@ -1,16 +1,15 @@
-namespace SiT.Scheduler.Utilities.Errors
+namespace SiT.Scheduler.Utilities.Errors;
+
+using System;
+
+public class ErrorFromException : IError
 {
-    using System;
+    private readonly Exception _exception;
 
-    public class ErrorFromException : IError
+    public ErrorFromException(Exception exception)
     {
-        private readonly Exception _exception;
-
-        public ErrorFromException(Exception exception)
-        {
-            this._exception = exception ?? throw new ArgumentNullException(nameof(exception));
-        }
-
-        public string ErrorMessage => this._exception.Message;
+        this._exception = exception ?? throw new ArgumentNullException(nameof(exception));
     }
+
+    public string ErrorMessage => this._exception.Message;
 }

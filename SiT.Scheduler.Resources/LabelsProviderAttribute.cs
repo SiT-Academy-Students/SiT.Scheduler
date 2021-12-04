@@ -1,8 +1,8 @@
-namespace SiT.Scheduler.Resources
-{
-    using System;
+namespace SiT.Scheduler.Resources;
 
-    public class LabelsProviderAttribute : Attribute
-    {
-    }
+using System;
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+public class LabelsProviderAttribute : Attribute
+{
 }

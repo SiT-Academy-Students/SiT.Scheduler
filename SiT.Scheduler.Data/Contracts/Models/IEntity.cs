@@ -1,9 +1,8 @@
-﻿namespace SiT.Scheduler.Data.Contracts.Models
-{
-    using System;
+namespace SiT.Scheduler.Data.Contracts.Models;
 
-    interface IEntity
-    {
-        Guid Id { get; }
-    }
+using System;
+
+public interface IEntity
+{
+    Guid Id { get; }
 }

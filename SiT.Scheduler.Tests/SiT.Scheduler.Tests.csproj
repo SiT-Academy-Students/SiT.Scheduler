@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-
+        <TargetFramework>net6.0</TargetFramework>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
@@ -17,6 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\SiT.Scheduler.Core\SiT.Scheduler.Core.csproj" />
+        <ProjectReference Include="..\SiT.Scheduler.Data.PostgreSql\SiT.Scheduler.Data.PostgreSql.csproj" />
         <ProjectReference Include="..\SiT.Scheduler.Data\SiT.Scheduler.Data.csproj" />
         <ProjectReference Include="..\SiT.Scheduler.Utilities\SiT.Scheduler.Utilities.csproj" />
     </ItemGroup>

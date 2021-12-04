@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.32.0.39516" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SiT.Scheduler.Data.PostgreSql\SiT.Scheduler.Data.PostgreSql.csproj"/>
+        <ProjectReference Include="..\SiT.Scheduler.Data\SiT.Scheduler.Data.csproj"/>
+    </ItemGroup>
+
+</Project>
