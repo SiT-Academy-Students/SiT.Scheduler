@@ -1,10 +1,9 @@
-﻿namespace SiT.Scheduler.Data.Enums
+namespace SiT.Scheduler.Data.Enums;
+
+public enum ObjectState
 {
-    public enum ObjectState
-    {
-        Active,
-        Inactive,
-        Archived,
-        Obsolete
-    }
+    Active,
+    Inactive,
+    Archived,
+    Obsolete
 }
