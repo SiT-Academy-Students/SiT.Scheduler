@@ -6,9 +6,9 @@ using Xunit;
 using Xunit.Abstractions;
 
 [Collection(PostgreSqlCollectionFixture.CollectionIdentifier)]
-public class PostgreSqlRepositoryTests : BaseRepositoryTest<PostgreSqlTestDatabaseProvider>
+public class SongRepositoryPostgreSqlTest : SongRepositoryTest<PostgreSqlTestDatabaseProvider>
 {
-    public PostgreSqlRepositoryTests(PostgreSqlTestDatabaseProvider testDatabaseProvider, ITestOutputHelper testOutputHelper)
+    public SongRepositoryPostgreSqlTest(PostgreSqlTestDatabaseProvider testDatabaseProvider, ITestOutputHelper testOutputHelper)
         : base(testDatabaseProvider, testOutputHelper)
     {
     }

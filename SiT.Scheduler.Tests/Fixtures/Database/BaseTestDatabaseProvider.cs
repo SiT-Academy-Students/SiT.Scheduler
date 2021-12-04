@@ -34,7 +34,7 @@ public abstract class BaseTestDatabaseProvider : ITestDatabaseProvider, IAsyncLi
     protected abstract void SetupDbContextInternally(IServiceCollection serviceCollection, ITestOutputHelper testOutputHelper);
     protected abstract SchedulerDbContext InitializeDbContext();
 
-    protected void AddLogging(DbContextOptionsBuilder optionsBuilder, ITestOutputHelper testOutputHelper)
+    protected static void AddLogging(DbContextOptionsBuilder optionsBuilder, ITestOutputHelper testOutputHelper)
     {
         Assert.NotNull(optionsBuilder);
         Assert.NotNull(testOutputHelper);

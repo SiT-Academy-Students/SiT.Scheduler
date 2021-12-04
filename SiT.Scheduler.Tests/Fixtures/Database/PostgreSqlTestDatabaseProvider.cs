@@ -18,7 +18,7 @@ public class PostgreSqlTestDatabaseProvider : BaseTestDatabaseProvider
             optionsBuilder =>
             {
                 this.SetupDbContextOptions(optionsBuilder);
-                this.AddLogging(optionsBuilder, testOutputHelper);
+                AddLogging(optionsBuilder, testOutputHelper);
             });
     }
 
