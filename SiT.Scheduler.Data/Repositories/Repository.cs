@@ -7,12 +7,14 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SiT.Scheduler.Data.Contracts.Models;
 using SiT.Scheduler.Data.Contracts.Repositories;
+using SiT.Scheduler.Data.Extensions;
 using SiT.Scheduler.Utilities.Errors;
 using SiT.Scheduler.Utilities.OperationResults;
 
 public class Repository<TEntity> : IRepository<TEntity>
-    where TEntity : class
+    where TEntity : class, IEntity
 {
     private readonly SchedulerDbContext _schedulerDbContext;
 
@@ -43,16 +45,13 @@ public class Repository<TEntity> : IRepository<TEntity>
         return operationResult;
     }
 
-    public async Task<IOperationResult<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken)
+    public async Task<IOperationResult<TEntity>> GetAsync(IEnumerable<Expression<Func<TEntity, bool>>> filters, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<TEntity>();
-        operationResult.ValidateNotNull(filter);
-        if (operationResult.IsSuccessful is false)
-            return operationResult;
 
         try
         {
-            var result = await this._schedulerDbContext.Set<TEntity>().Where(filter).FirstOrDefaultAsync(cancellationToken);
+            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).FirstOrDefaultAsync(cancellationToken);
             operationResult.Data = result;
         }
         catch (Exception e)
@@ -64,16 +63,13 @@ public class Repository<TEntity> : IRepository<TEntity>
         return operationResult;
     }
 
-    public async Task<IOperationResult<TLayout>> GetAsync<TLayout>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TLayout>> projection, CancellationToken cancellationToken)
+    public async Task<IOperationResult<TLayout>> GetAsync<TLayout>(IEnumerable<Expression<Func<TEntity, bool>>> filters, Expression<Func<TEntity, TLayout>> projection, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<TLayout>();
-        operationResult.ValidateNotNull(filter);
-        if (operationResult.IsSuccessful is false)
-            return operationResult;
 
         try
         {
-            var result = await this._schedulerDbContext.Set<TEntity>().Where(filter).Select(projection).FirstOrDefaultAsync(cancellationToken);
+            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).Select(projection).FirstOrDefaultAsync(cancellationToken);
             operationResult.Data = result;
         }
 
@@ -86,16 +82,13 @@ public class Repository<TEntity> : IRepository<TEntity>
         return operationResult;
     }
 
-    public async Task<IOperationResult<IEnumerable<TEntity>>> GetManyAsync(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken)
+    public async Task<IOperationResult<IEnumerable<TEntity>>> GetManyAsync(IEnumerable<Expression<Func<TEntity, bool>>> filters, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<IEnumerable<TEntity>>();
-        operationResult.ValidateNotNull(filter);
-        if (operationResult.IsSuccessful is false)
-            return operationResult;
 
         try
         {
-            var result = await this._schedulerDbContext.Set<TEntity>().Where(filter).ToListAsync(cancellationToken);
+            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).ToListAsync(cancellationToken);
             operationResult.Data = result;
         }
         catch (Exception e)
@@ -107,16 +100,13 @@ public class Repository<TEntity> : IRepository<TEntity>
         return operationResult;
     }
 
-    public async Task<IOperationResult<IEnumerable<TLayout>>> GetManyAsync<TLayout>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TLayout>> projection, CancellationToken cancellationToken)
+    public async Task<IOperationResult<IEnumerable<TLayout>>> GetManyAsync<TLayout>(IEnumerable<Expression<Func<TEntity, bool>>> filters, Expression<Func<TEntity, TLayout>> projection, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<IEnumerable<TLayout>>();
-        operationResult.ValidateNotNull(filter);
-        if (operationResult.IsSuccessful is false)
-            return operationResult;
 
         try
         {
-            var result = await this._schedulerDbContext.Set<TEntity>().Where(filter).Select(projection).ToListAsync(cancellationToken);
+            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).Select(projection).ToListAsync(cancellationToken);
             operationResult.Data = result;
         }
 

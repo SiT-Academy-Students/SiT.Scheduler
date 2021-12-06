@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SiT.Scheduler.Utilities;
+using TryAtSoftware.Randomizer.Core.Helpers;
 using TryAtSoftware.Randomizer.Core.Primitives;
 using Xunit;
 
@@ -56,5 +57,17 @@ public class CollectionExtensionsTests
 
         foreach (var element in cleanCollection)
             Assert.NotEqual(default, element);
+    }
+
+    [Fact]
+    public void AsEnumerableShouldWorkCorrectly()
+    {
+        var value = RandomizationHelper.GetRandomString();
+
+        var enumerableValue = value.AsEnumerable();
+        Assert.NotNull(enumerableValue);
+
+        var singleElement = Assert.Single(enumerableValue);
+        Assert.Equal(value, singleElement);
     }
 }

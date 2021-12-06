@@ -26,4 +26,6 @@ public static class CollectionExtensions
 
         return collection.Where(el => !el.Equals(default));
     }
+
+    public static IEnumerable<T> AsEnumerable<T>(this T value) => new [] { value };
 }

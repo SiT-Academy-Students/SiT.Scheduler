@@ -9,10 +9,4 @@
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.33.0.40503" PrivateAssets="all" />
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\SiT.Scheduler.Data.PostgreSql\SiT.Scheduler.Data.PostgreSql.csproj" />
-        <ProjectReference Include="..\SiT.Scheduler.Data\SiT.Scheduler.Data.csproj" />
-        <ProjectReference Include="..\SiT.Scheduler.DI\SiT.Scheduler.DI.csproj" />
-    </ItemGroup>
-
 </Project>
