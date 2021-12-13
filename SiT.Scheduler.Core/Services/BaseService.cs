@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using SiT.Scheduler.Core.Contracts.OperativeModels;
 using SiT.Scheduler.Core.Contracts.Options;
 using SiT.Scheduler.Core.Contracts.Services;
@@ -129,8 +130,8 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
     }
 
     protected abstract Expression<Func<TEntity, bool>> ConstructFilter(TExternalRequirement externalRequirement);
-    protected abstract TEntity Initialize(TPrototype prototype);
-    protected abstract void ApplyPrototype(TPrototype prototype, TEntity entity);
+    protected abstract TEntity Initialize([NotNull] TPrototype prototype);
+    protected abstract void ApplyPrototype([NotNull] TPrototype prototype, [NotNull] TEntity entity);
 
     private static Expression<Func<TEntity, bool>> ConstructIdFilter(Guid id) => x => x.Id == id;
 }
