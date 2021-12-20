@@ -84,7 +84,7 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         return operationResult;
     }
 
-    public async Task<IOperationResult<ICreateEntityResult>> CreateAsync<TLayout>(TPrototype prototype, CancellationToken cancellationToken)
+    public async Task<IOperationResult<ICreateEntityResult>> CreateAsync(TPrototype prototype, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<ICreateEntityResult>();
         operationResult.ValidateNotNull(prototype);
@@ -102,7 +102,7 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         return operationResult;
     }
 
-    public async Task<IOperationResult> UpdateAsync<TLayout>(Guid id, TPrototype prototype, CancellationToken cancellationToken)
+    public async Task<IOperationResult> UpdateAsync(Guid id, TPrototype prototype, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult();
         operationResult.ValidateNotDefault(id);
