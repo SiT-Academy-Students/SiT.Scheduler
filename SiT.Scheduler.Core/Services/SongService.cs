@@ -7,19 +7,16 @@ using SiT.Scheduler.Core.Contracts.Services;
 using SiT.Scheduler.Core.Contracts.Transformations;
 using SiT.Scheduler.Data.Contracts.Repositories;
 using SiT.Scheduler.Data.Models;
+using SiT.Scheduler.Validation.Contracts;
 
 public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongPrototype>, ISongService
 {
-    public SongService(IRepository<Song> repository, IDataTransformerFactory dataTransformerFactory)
-        : base(repository, dataTransformerFactory)
+    public SongService(IRepository<Song> repository, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory)
+        : base(repository, entityValidatorFactory, dataTransformerFactory)
     {
     }
 
-    protected override Song Initialize(ISongPrototype prototype)
-    {
-        var song = new Song();
-        return song;
-    }
+    protected override Song Initialize(ISongPrototype prototype) => new();
 
     protected override void ApplyPrototype(ISongPrototype prototype, Song entity)
     {

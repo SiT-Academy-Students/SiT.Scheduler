@@ -15,6 +15,7 @@ using SiT.Scheduler.Data.Contracts.Repositories;
 using SiT.Scheduler.Utilities;
 using SiT.Scheduler.Utilities.Errors;
 using SiT.Scheduler.Utilities.OperationResults;
+using SiT.Scheduler.Validation.Contracts;
 
 public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : IService<TEntity, TExternalRequirement, TPrototype>
     where TEntity : class, IEntity
@@ -22,11 +23,13 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
     where TPrototype : class
 {
     private readonly IRepository<TEntity> _repository;
+    private readonly IEntityValidatorFactory _entityValidatorFactory;
     private readonly IDataTransformerFactory _dataTransformerFactory;
 
-    protected BaseService(IRepository<TEntity> repository, IDataTransformerFactory dataTransformerFactory)
+    protected BaseService(IRepository<TEntity> repository, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory)
     {
         this._repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        this._entityValidatorFactory = entityValidatorFactory ?? throw new ArgumentNullException(nameof(entityValidatorFactory));
         this._dataTransformerFactory = dataTransformerFactory ?? throw new ArgumentNullException(nameof(dataTransformerFactory));
     }
 
@@ -91,8 +94,18 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         if (!operationResult.IsSuccessful)
             return operationResult;
 
+        var prototypeValidator = this._entityValidatorFactory.BuildValidator<TPrototype>();
+        var validatePrototype = await prototypeValidator.ValidateAsync(prototype, cancellationToken);
+        if (!validatePrototype.IsSuccessful)
+            return operationResult.AppendErrors(validatePrototype);
+
         var initializedEntity = this.Initialize(prototype);
         this.ApplyPrototype(prototype, initializedEntity);
+
+        var entityValidator = this._entityValidatorFactory.BuildValidator<TEntity>();
+        var validateEntity = await entityValidator.ValidateAsync(initializedEntity, cancellationToken);
+        if (!validateEntity.IsSuccessful)
+            return operationResult.AppendErrors(validateEntity);
 
         var createEntity = await this._repository.CreateAsync(initializedEntity, cancellationToken);
         if (!createEntity.IsSuccessful)
@@ -121,7 +134,18 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         if (!operationResult.IsSuccessful)
             return operationResult;
 
+        var prototypeValidator = this._entityValidatorFactory.BuildValidator<TPrototype>();
+        var validatePrototype = await prototypeValidator.ValidateAsync(prototype, cancellationToken);
+        if (!validatePrototype.IsSuccessful)
+            return operationResult.AppendErrors(validatePrototype);
+
         this.ApplyPrototype(prototype, existingEntity);
+
+        var entityValidator = this._entityValidatorFactory.BuildValidator<TEntity>();
+        var validateEntity = await entityValidator.ValidateAsync(existingEntity, cancellationToken);
+        if (!validateEntity.IsSuccessful)
+            return operationResult.AppendErrors(validateEntity);
+
         var updateEntity = await this._repository.UpdateAsync(existingEntity, cancellationToken);
         if (!updateEntity.IsSuccessful)
             return operationResult.AppendErrors(updateEntity);

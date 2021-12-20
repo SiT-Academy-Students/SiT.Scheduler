@@ -9,4 +9,8 @@
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.33.0.40503" PrivateAssets="all" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SiT.Scheduler.Utilities\SiT.Scheduler.Utilities.csproj" />
+    </ItemGroup>
+
 </Project>
