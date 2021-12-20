@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SiT.Scheduler.Utilities.OperationResults;
 
-public interface IEntityValidatingMachine
+internal interface IEntityValidatingMachine
 {
     Task<IOperationResult> TriggerValidationAsync(CancellationToken cancellationToken);
 }
