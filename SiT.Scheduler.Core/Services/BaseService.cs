@@ -94,19 +94,11 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         if (!operationResult.IsSuccessful)
             return operationResult;
 
-        var prototypeValidator = this._entityValidatorFactory.BuildValidator<TPrototype>();
-        var validatePrototype = await prototypeValidator.ValidateAsync(prototype, cancellationToken);
-        if (!validatePrototype.IsSuccessful)
-            return operationResult.AppendErrors(validatePrototype);
+        var prepareEntity = await this.PrepareEntityAsync(prototype, () => this.InitializeEntity(prototype), cancellationToken);
+        if (!prepareEntity.IsSuccessful)
+            return operationResult.AppendErrors(prepareEntity);
 
-        var initializedEntity = this.Initialize(prototype);
-        this.ApplyPrototype(prototype, initializedEntity);
-
-        var entityValidator = this._entityValidatorFactory.BuildValidator<TEntity>();
-        var validateEntity = await entityValidator.ValidateAsync(initializedEntity, cancellationToken);
-        if (!validateEntity.IsSuccessful)
-            return operationResult.AppendErrors(validateEntity);
-
+        var initializedEntity = prepareEntity.Data;
         var createEntity = await this._repository.CreateAsync(initializedEntity, cancellationToken);
         if (!createEntity.IsSuccessful)
             return operationResult.AppendErrors(createEntity);
@@ -134,17 +126,9 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         if (!operationResult.IsSuccessful)
             return operationResult;
 
-        var prototypeValidator = this._entityValidatorFactory.BuildValidator<TPrototype>();
-        var validatePrototype = await prototypeValidator.ValidateAsync(prototype, cancellationToken);
-        if (!validatePrototype.IsSuccessful)
-            return operationResult.AppendErrors(validatePrototype);
-
-        this.ApplyPrototype(prototype, existingEntity);
-
-        var entityValidator = this._entityValidatorFactory.BuildValidator<TEntity>();
-        var validateEntity = await entityValidator.ValidateAsync(existingEntity, cancellationToken);
-        if (!validateEntity.IsSuccessful)
-            return operationResult.AppendErrors(validateEntity);
+        var prepareEntity = await this.PrepareEntityAsync(prototype, () => existingEntity, cancellationToken);
+        if (!prepareEntity.IsSuccessful)
+            return operationResult.AppendErrors(prepareEntity);
 
         var updateEntity = await this._repository.UpdateAsync(existingEntity, cancellationToken);
         if (!updateEntity.IsSuccessful)
@@ -154,8 +138,34 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
     }
 
     protected abstract Expression<Func<TEntity, bool>> ConstructFilter(TExternalRequirement externalRequirement);
-    protected abstract TEntity Initialize([NotNull] TPrototype prototype);
+    protected abstract TEntity InitializeEntity([NotNull] TPrototype prototype);
     protected abstract void ApplyPrototype([NotNull] TPrototype prototype, [NotNull] TEntity entity);
 
     private static Expression<Func<TEntity, bool>> ConstructIdFilter(Guid id) => x => x.Id == id;
+
+    private async Task<IOperationResult<TEntity>> PrepareEntityAsync(TPrototype prototype, Func<TEntity> getEntity, CancellationToken cancellationToken)
+    {
+        var operationResult = new OperationResult<TEntity>();
+
+        operationResult.ValidateNotNull(prototype);
+        operationResult.ValidateNotNull(getEntity);
+        if (!operationResult.IsSuccessful) return operationResult;
+
+        var prototypeValidator = this._entityValidatorFactory.BuildValidator<TPrototype>();
+        var validatePrototype = await prototypeValidator.ValidateAsync(prototype, cancellationToken);
+        if (!validatePrototype.IsSuccessful)
+            return operationResult.AppendErrors(validatePrototype);
+
+        var entity = getEntity();
+        operationResult.ValidateNotNull(entity);
+        if (!operationResult.IsSuccessful) return operationResult;
+
+        this.ApplyPrototype(prototype, entity);
+        var entityValidator = this._entityValidatorFactory.BuildValidator<TEntity>();
+        var validateEntity = await entityValidator.ValidateAsync(entity, cancellationToken);
+        if (!validateEntity.IsSuccessful)
+            return operationResult.AppendErrors(validateEntity);
+
+        return operationResult;
+    }
 }

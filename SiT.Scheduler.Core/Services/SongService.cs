@@ -16,7 +16,7 @@ public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongP
     {
     }
 
-    protected override Song Initialize(ISongPrototype prototype) => new();
+    protected override Song InitializeEntity(ISongPrototype prototype) => new();
 
     protected override void ApplyPrototype(ISongPrototype prototype, Song entity)
     {
