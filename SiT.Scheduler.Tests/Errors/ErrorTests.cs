@@ -19,7 +19,7 @@ public class ErrorTests
 
     public static IEnumerable<object[]> ConstructAllErrors()
     {
-        yield return new object[] { typeof(ArgumentNullError), Array.Empty<object>() };
+        yield return new object[] { typeof(InvalidArgumentError), Array.Empty<object>() };
         yield return new object[] { typeof(ErrorFromException), new object[] { new InvalidOperationException(RandomizationHelper.GetRandomString()) } };
         yield return new object[] { typeof(StandardError), new object[] { RandomizationHelper.GetRandomString() } };
     }

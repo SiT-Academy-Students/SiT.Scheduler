@@ -123,11 +123,14 @@
   <data name="IndexIsOutOfRange" xml:space="preserve">
     <value>Индексът е извън границите на обекта.</value>
   </data>
+  <data name="InvalidArgument" xml:space="preserve">
+    <value>Един от подадените параметри е невалиден.</value>
+  </data>
   <data name="InvalidOperation" xml:space="preserve">
     <value>Операцията е невалидна.</value>
   </data>
-  <data name="ValueIsNull" xml:space="preserve">
-    <value>Стойността е празна.</value>
+  <data name="UnsupportedLayout" xml:space="preserve">
+    <value>Това оформление на данните не се поддържа.</value>
   </data>
   <data name="WrongFormat" xml:space="preserve">
     <value>Аргументът няма правилен формат.</value>

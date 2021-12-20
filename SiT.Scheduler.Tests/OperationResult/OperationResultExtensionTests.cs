@@ -23,7 +23,7 @@ public class OperationResultExtensionTests
         operationResult.ValidateNotNull<object>(null);
         Assert.False(operationResult.IsSuccessful);
         var error = Assert.Single(operationResult.Errors);
-        Assert.IsType<ArgumentNullError>(error);
+        Assert.IsType<InvalidArgumentError>(error);
     }
 
     [Fact]
