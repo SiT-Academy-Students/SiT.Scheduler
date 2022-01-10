@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		Docs.md = Docs.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.Utilities", "SiT.Scheduler.Utilities\SiT.Scheduler.Utilities.csproj", "{632FA370-64C0-4806-9D73-897C5A9E28D2}"
@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.Core", "SiT.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.API", "SiT.Scheduler.API\SiT.Scheduler.API.csproj", "{350B0AE9-19FD-4B9C-A617-2ABECE344BDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiT.Scheduler.DI", "SiT.Scheduler.DI\SiT.Scheduler.DI.csproj", "{55D5A256-99A2-4984-A1EC-434B830D4C84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.DI", "SiT.Scheduler.DI\SiT.Scheduler.DI.csproj", "{55D5A256-99A2-4984-A1EC-434B830D4C84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
