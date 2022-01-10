@@ -15,6 +15,7 @@ using SiT.Scheduler.Data.Contracts.Repositories;
 using SiT.Scheduler.Utilities;
 using SiT.Scheduler.Utilities.Errors;
 using SiT.Scheduler.Utilities.OperationResults;
+using SiT.Scheduler.Validation.Contracts;
 
 public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : IService<TEntity, TExternalRequirement, TPrototype>
     where TEntity : class, IEntity
@@ -22,11 +23,13 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
     where TPrototype : class
 {
     private readonly IRepository<TEntity> _repository;
+    private readonly IEntityValidatorFactory _entityValidatorFactory;
     private readonly IDataTransformerFactory _dataTransformerFactory;
 
-    protected BaseService(IRepository<TEntity> repository, IDataTransformerFactory dataTransformerFactory)
+    protected BaseService(IRepository<TEntity> repository, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory)
     {
         this._repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        this._entityValidatorFactory = entityValidatorFactory ?? throw new ArgumentNullException(nameof(entityValidatorFactory));
         this._dataTransformerFactory = dataTransformerFactory ?? throw new ArgumentNullException(nameof(dataTransformerFactory));
     }
 
@@ -91,9 +94,11 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         if (!operationResult.IsSuccessful)
             return operationResult;
 
-        var initializedEntity = this.Initialize(prototype);
-        this.ApplyPrototype(prototype, initializedEntity);
+        var prepareEntity = await this.PrepareEntityAsync(prototype, () => this.InitializeEntity(prototype), cancellationToken);
+        if (!prepareEntity.IsSuccessful)
+            return operationResult.AppendErrors(prepareEntity);
 
+        var initializedEntity = prepareEntity.Data;
         var createEntity = await this._repository.CreateAsync(initializedEntity, cancellationToken);
         if (!createEntity.IsSuccessful)
             return operationResult.AppendErrors(createEntity);
@@ -121,7 +126,10 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         if (!operationResult.IsSuccessful)
             return operationResult;
 
-        this.ApplyPrototype(prototype, existingEntity);
+        var prepareEntity = await this.PrepareEntityAsync(prototype, () => existingEntity, cancellationToken);
+        if (!prepareEntity.IsSuccessful)
+            return operationResult.AppendErrors(prepareEntity);
+
         var updateEntity = await this._repository.UpdateAsync(existingEntity, cancellationToken);
         if (!updateEntity.IsSuccessful)
             return operationResult.AppendErrors(updateEntity);
@@ -130,8 +138,34 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
     }
 
     protected abstract Expression<Func<TEntity, bool>> ConstructFilter(TExternalRequirement externalRequirement);
-    protected abstract TEntity Initialize([NotNull] TPrototype prototype);
+    protected abstract TEntity InitializeEntity([NotNull] TPrototype prototype);
     protected abstract void ApplyPrototype([NotNull] TPrototype prototype, [NotNull] TEntity entity);
 
     private static Expression<Func<TEntity, bool>> ConstructIdFilter(Guid id) => x => x.Id == id;
+
+    private async Task<IOperationResult<TEntity>> PrepareEntityAsync(TPrototype prototype, Func<TEntity> getEntity, CancellationToken cancellationToken)
+    {
+        var operationResult = new OperationResult<TEntity>();
+
+        operationResult.ValidateNotNull(prototype);
+        operationResult.ValidateNotNull(getEntity);
+        if (!operationResult.IsSuccessful) return operationResult;
+
+        var prototypeValidator = this._entityValidatorFactory.BuildValidator<TPrototype>();
+        var validatePrototype = await prototypeValidator.ValidateAsync(prototype, cancellationToken);
+        if (!validatePrototype.IsSuccessful)
+            return operationResult.AppendErrors(validatePrototype);
+
+        var entity = getEntity();
+        operationResult.ValidateNotNull(entity);
+        if (!operationResult.IsSuccessful) return operationResult;
+
+        this.ApplyPrototype(prototype, entity);
+        var entityValidator = this._entityValidatorFactory.BuildValidator<TEntity>();
+        var validateEntity = await entityValidator.ValidateAsync(entity, cancellationToken);
+        if (!validateEntity.IsSuccessful)
+            return operationResult.AppendErrors(validateEntity);
+
+        return operationResult;
+    }
 }

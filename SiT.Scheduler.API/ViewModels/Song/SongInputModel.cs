@@ -1,5 +1,4 @@
 namespace SiT.Scheduler.API.ViewModels.Song;
-
 using JetBrains.Annotations;
 
 public class SongInputModel

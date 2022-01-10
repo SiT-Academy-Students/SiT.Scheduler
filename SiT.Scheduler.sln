@@ -32,6 +32,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.API", "SiT.Sc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiT.Scheduler.DI", "SiT.Scheduler.DI\SiT.Scheduler.DI.csproj", "{55D5A256-99A2-4984-A1EC-434B830D4C84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiT.Scheduler.Validation", "SiT.Scheduler.Validation\SiT.Scheduler.Validation.csproj", "{5A5DA727-6405-4D77-8D25-08FD185ED302}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{55D5A256-99A2-4984-A1EC-434B830D4C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55D5A256-99A2-4984-A1EC-434B830D4C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55D5A256-99A2-4984-A1EC-434B830D4C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A5DA727-6405-4D77-8D25-08FD185ED302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A5DA727-6405-4D77-8D25-08FD185ED302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A5DA727-6405-4D77-8D25-08FD185ED302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A5DA727-6405-4D77-8D25-08FD185ED302}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
