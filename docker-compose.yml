@@ -1,0 +1,18 @@
+services:
+  postgresql:
+    image: postgres:14.1
+    container_name: sit_scheduler_postgresql
+    volumes:
+      - sit_scheduler_postgresql_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=scheduler_tests_user
+      - POSTGRES_PASSWORD=123456-Aa
+
+volumes:
+  sit_scheduler_postgresql_data:
+
+networks:
+  default:
+    name: sit_scheduler
