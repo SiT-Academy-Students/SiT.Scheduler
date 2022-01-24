@@ -1,6 +1,5 @@
 namespace SiT.Scheduler.Repository.Tests.Integration;
 
-using System.Collections.Generic;
 using SiT.Scheduler.Data.Contracts.Repositories;
 using SiT.Scheduler.Data.Models;
 using SiT.Scheduler.Tests.Interface;
