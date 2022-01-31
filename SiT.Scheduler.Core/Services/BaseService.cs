@@ -166,6 +166,7 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         if (!validateEntity.IsSuccessful)
             return operationResult.AppendErrors(validateEntity);
 
+        operationResult.Data = entity;
         return operationResult;
     }
 }
