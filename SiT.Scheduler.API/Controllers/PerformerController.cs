@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SiT.Scheduler.API.Contracts.Factories;
+using SiT.Scheduler.API.ViewModels.Performer;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using SiT.Scheduler.Core.Contracts.Services;
 using SiT.Scheduler.Core.OperativeModels.ExternalRequirements;

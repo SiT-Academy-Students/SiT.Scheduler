@@ -1,4 +1,4 @@
-namespace SiT.Scheduler.API.Controllers;
+namespace SiT.Scheduler.API.ViewModels.Performer;
 
 using JetBrains.Annotations;
 

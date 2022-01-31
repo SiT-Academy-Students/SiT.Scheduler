@@ -87,6 +87,27 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         return operationResult;
     }
 
+    public async Task<IOperationResult<IEnumerable<TEntity>>> GetManyAsync(TExternalRequirement externalRequirement, CancellationToken cancellationToken, IQueryEntityOptions<TEntity> options = null)
+    {
+        var operationResult = new OperationResult<IEnumerable<TEntity>>();
+        operationResult.ValidateNotNull(externalRequirement);
+        if (!operationResult.IsSuccessful)
+            return operationResult;
+
+        var externalRequirementFilter = this.ConstructFilter(externalRequirement);
+        var optionsFilters = (options?.AdditionalFilters).OrEmptyIfNull().IgnoreNullValues();
+
+        var allFilters = new List<Expression<Func<TEntity, bool>>> { externalRequirementFilter };
+        allFilters.AddRange(optionsFilters);
+
+        var getLayouts = await this._repository.GetManyAsync(allFilters, cancellationToken);
+        if (!getLayouts.IsSuccessful)
+            return operationResult.AppendErrors(getLayouts);
+
+        operationResult.Data = getLayouts.Data.OrEmptyIfNull();
+        return operationResult;
+    }
+
     public async Task<IOperationResult<ICreateEntityResult>> CreateAsync(TPrototype prototype, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<ICreateEntityResult>();
