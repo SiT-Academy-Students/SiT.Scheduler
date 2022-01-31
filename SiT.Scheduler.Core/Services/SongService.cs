@@ -21,7 +21,6 @@ public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongP
     protected override void ApplyPrototype(ISongPrototype prototype, Song entity)
     {
         entity.Name = prototype.Name;
-        entity.Author = prototype.Author;
     }
 
     protected override Expression<Func<Song, bool>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => null;

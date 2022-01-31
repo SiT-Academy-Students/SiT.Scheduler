@@ -1,5 +1,6 @@
 namespace SiT.Scheduler.Core.Contracts.OperativeModels.Prototypes;
-public interface ISongPrototype
+public interface IGenrePrototype
 {
     string Name { get; }
+    string Description { get; }
 }

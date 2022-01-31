@@ -2,4 +2,4 @@ namespace SiT.Scheduler.Core.OperativeModels.Prototype;
 
 using SiT.Scheduler.Core.Contracts.OperativeModels.Prototypes;
 
-public record SongPrototype(string Name) : ISongPrototype;
+public record GenrePrototype(string Name, string Description) : IGenrePrototype;
