@@ -28,10 +28,12 @@ public static class ServicesConfigurationExtensions
         // Register all services.
         services.AddScoped<ISongService, SongService>();
         services.AddScoped<IGenreService, GenreService>();
+        services.AddScoped<IPerformerService, PerformerService>();
         services.AddTransient<IDataTransformerFactory, DataTransformerFactory>();
         services.AddTransient<IDependenciesAccessor, DependenciesAccessor>();
         services.AddSingleton<IDataTransformer<Song, ISongLayout>, SongLayoutTransformer>();
-        services.AddSingleton<IDataTransformer<Genre, IGenreMinifiedLayout>, GenreLayoutTransformer>();
+        services.AddSingleton<IDataTransformer<Genre, IGenreMinifiedLayout>, GenreMinifiedLayoutTransformer>();
+        services.AddSingleton<IDataTransformer<Performer, IPerformerMinifiedLayout>, PerformerMinifiedLayoutTransformer>();
 
         // Register all repositories.
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

@@ -7,7 +7,7 @@ using SiT.Scheduler.Core.Contracts.Transformations;
 using SiT.Scheduler.Core.OperativeModels.Layouts;
 using SiT.Scheduler.Data.Models;
 
-public class GenreLayoutTransformer : IDataTransformer<Genre, IGenreMinifiedLayout>
+public class GenreMinifiedLayoutTransformer : IDataTransformer<Genre, IGenreMinifiedLayout>
 {
     public Expression<Func<Genre, IGenreMinifiedLayout>> Projection => GetProjection();
 
