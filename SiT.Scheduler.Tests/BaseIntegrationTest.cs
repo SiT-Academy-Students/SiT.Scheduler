@@ -6,7 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using SiT.Scheduler.Core.Configuration;
 using SiT.Scheduler.Data.Contracts.Repositories;
 using SiT.Scheduler.Data.Models;
+using SiT.Scheduler.Tests.Equalization;
 using SiT.Scheduler.Tests.Interface;
+using TryAtSoftware.Equalizer.Core;
+using TryAtSoftware.Equalizer.Core.Interfaces;
+using TryAtSoftware.Equalizer.Core.ProfileProviders;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,6 +23,7 @@ public abstract class BaseIntegrationTest<TDatabaseProvider> : IDisposable
 
     protected ITestOutputHelper TestOutputHelper { get; }
     protected IServiceProvider ServiceProvider { get; }
+    protected IEqualizer Equalizer { get; }
 
     protected IRepository<Song> SongRepository => this.GetService<IRepository<Song>>();
 
@@ -31,12 +36,24 @@ public abstract class BaseIntegrationTest<TDatabaseProvider> : IDisposable
         var serviceCollection = new ServiceCollection();
         testDatabaseProvider.SetupDbContext(serviceCollection, testOutputHelper);
         serviceCollection.RegisterServices();
+        serviceCollection.RegisterEqualizationProfiles();
         this._rootServiceProvider = serviceCollection.BuildServiceProvider();
         this._serviceScope = this._rootServiceProvider.CreateScope();
         this.ServiceProvider = this._serviceScope.ServiceProvider;
+
+        this.Equalizer = this.InitializeEqualizer();
     }
 
     protected CancellationToken GetCancellationToken() => CancellationToken.None;
+
+    private IEqualizer InitializeEqualizer()
+    {
+        var equalizer = new Equalizer();
+
+        var profileProvider = new DynamicProfileProvider(() => this.ServiceProvider.GetServices<IEqualizationProfile>());
+        equalizer.AddProfileProvider(profileProvider);
+        return equalizer;
+    }
 
     private TService GetService<TService>()
         where TService : class
