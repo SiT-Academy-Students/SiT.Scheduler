@@ -14,7 +14,6 @@ public class SongFactory : ISongFactory
         {
             Id = layout.Id,
             Name = layout.Name,
-            Author = layout.Author,
         };
 
         return viewModel;

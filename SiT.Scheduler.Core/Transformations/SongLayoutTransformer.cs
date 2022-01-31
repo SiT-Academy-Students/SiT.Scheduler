@@ -11,5 +11,5 @@ public class SongLayoutTransformer : IDataTransformer<Song, ISongLayout>
 {
     public Expression<Func<Song, ISongLayout>> Projection => GetProjection();
 
-    private static Expression<Func<Song, ISongLayout>> GetProjection() => s => new SongLayout(s.Id, s.Name, s.Author);
+    private static Expression<Func<Song, ISongLayout>> GetProjection() => s => new SongLayout(s.Id, s.Name);
 }

@@ -17,7 +17,11 @@ public class SchedulerDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Song>()
-            .HasMany(e => e.Performers)
-            .WithMany(e => e.Songs);
+            .HasMany(s => s.Performers)
+            .WithMany(p => p.Songs);
+
+        modelBuilder.Entity<Performer>()
+            .HasMany(p => p.Songs)
+            .WithMany(s => s.Performers);
     }  
 }

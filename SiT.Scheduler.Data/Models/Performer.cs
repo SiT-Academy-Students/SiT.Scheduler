@@ -1,4 +1,4 @@
-﻿namespace SiT.Scheduler.Data.Models;
+namespace SiT.Scheduler.Data.Models;
 
 using System;
 using SiT.Scheduler.Data.Contracts.Models;
@@ -8,5 +8,5 @@ public class Performer : IEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; }    
-    public ICollection Songs { get; set; }
+    public ICollection<Song> Songs { get; set; }
 }
