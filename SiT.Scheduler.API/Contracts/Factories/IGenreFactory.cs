@@ -5,5 +5,5 @@ using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 
 public interface IGenreFactory
 {
-    GenreViewModel ToViewModel(IGenreLayout layout);
+    GenreViewModel ToViewModel(IGenreMinifiedLayout layout);
 }

@@ -12,5 +12,6 @@ public static class FactoryConfigurationExtensions
         if (services is null) throw new ArgumentNullException(nameof(services));
 
         services.AddSingleton<ISongFactory, SongFactory>();
+        services.AddSingleton<IGenreFactory, GenreFactory>();
     }
 }

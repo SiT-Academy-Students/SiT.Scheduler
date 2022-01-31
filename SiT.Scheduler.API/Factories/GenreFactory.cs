@@ -6,7 +6,7 @@ using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 
 public class GenreFactory : IGenreFactory
 {
-    public GenreViewModel ToViewModel(IGenreLayout layout)
+    public GenreViewModel ToViewModel(IGenreMinifiedLayout layout)
     {
         if (layout is null) return null;
 
