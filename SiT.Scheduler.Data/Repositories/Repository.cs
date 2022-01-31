@@ -129,6 +129,10 @@ public class Repository<TEntity> : IRepository<TEntity>
 
         try
         {
+            var trackedEntity = this._schedulerDbContext.Set<TEntity>().Local.FirstOrDefault(x => x.Id == entity.Id);
+            if (trackedEntity != null) this._schedulerDbContext.Entry(trackedEntity).State = EntityState.Detached;
+            this._schedulerDbContext.Entry(entity).State = EntityState.Modified;
+
             this._schedulerDbContext.Update(entity);
             await this._schedulerDbContext.SaveChangesAsync(cancellationToken);
         }
