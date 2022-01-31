@@ -8,5 +8,7 @@ public class Song : IEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
+
+    public ICollection<Genre> Genres { get; set; }
     public ICollection<Performer> Performers { get; set; }
 }
