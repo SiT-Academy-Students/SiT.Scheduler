@@ -13,5 +13,6 @@ public static class FactoryConfigurationExtensions
 
         services.AddSingleton<ISongFactory, SongFactory>();
         services.AddSingleton<IGenreFactory, GenreFactory>();
+        services.AddSingleton<IPerformerFactory, PerformerFactory>();
     }
 }
