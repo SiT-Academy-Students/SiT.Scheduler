@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SiT.Scheduler.API.Contracts.Factories;
 using SiT.Scheduler.API.ViewModels.Song;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using SiT.Scheduler.Core.Contracts.Services;
@@ -17,10 +18,12 @@ using SiT.Scheduler.Utilities;
 public class SongController : ControllerBase
 {
     private readonly ISongService _songService;
+    private readonly ISongFactory _songFactory;
 
-    public SongController(ISongService songService)
+    public SongController(ISongService songService, ISongFactory songFactory)
     {
         this._songService = songService ?? throw new ArgumentNullException(nameof(songService));
+        this._songFactory = songFactory ?? throw new ArgumentNullException(nameof(songFactory));
     }
 
     [HttpPost]
@@ -28,7 +31,7 @@ public class SongController : ControllerBase
     {
         if (inputModel is null) return this.BadRequest("Invalid input model.");
 
-        var prototype = new SongPrototype(inputModel.Name, inputModel.Author);
+        var prototype = new SongPrototype(inputModel.Name, inputModel.Genres, inputModel.Performers);
         var createSong = await this._songService.CreateAsync(prototype, cancellationToken);
         if (!createSong.IsSuccessful)
             return this.BadRequest(createSong.ToString());
@@ -43,21 +46,7 @@ public class SongController : ControllerBase
         if (!getSongs.IsSuccessful)
             return this.BadRequest(getSongs.ToString());
 
-        var viewModels = getSongs.Data.OrEmptyIfNull().IgnoreNullValues().Select(this.ToViewModel);
+        var viewModels = getSongs.Data.OrEmptyIfNull().IgnoreNullValues().Select(this._songFactory.ToViewModel);
         return this.Ok(viewModels);
-    }
-
-    private SongViewModel ToViewModel(ISongLayout songLayout)
-    {
-        if (songLayout is null) return null;
-
-        var viewModel = new SongViewModel
-        {
-            Id = songLayout.Id,
-            Name = songLayout.Name,
-            Author = songLayout.Author,
-        };
-
-        return viewModel;
     }
 }

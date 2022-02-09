@@ -69,7 +69,7 @@ public class EntityValidator<TEntity> : IEntityValidator<TEntity>
         void AddValidators(Type validatedType)
         {
             var principalType = typeof(TEntity);
-            if (principalType.IsAssignableFrom(validatedType) == false)
+            if (!principalType.IsAssignableFrom(validatedType))
                 return;
 
             var validatorType = typeof(IValidator<>).MakeGenericType(validatedType);

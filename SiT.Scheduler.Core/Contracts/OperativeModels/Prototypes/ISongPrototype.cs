@@ -1,6 +1,11 @@
 namespace SiT.Scheduler.Core.Contracts.OperativeModels.Prototypes;
+
+using System;
+using System.Collections.Generic;
+
 public interface ISongPrototype
 {
     string Name { get; }
-    string Author { get; }
+    IReadOnlyCollection<Guid> Genres { get; }
+    IReadOnlyCollection<Guid> Performers { get; }
 }

@@ -9,7 +9,16 @@ using SiT.Scheduler.Data.Models;
 
 public class SongLayoutTransformer : IDataTransformer<Song, ISongLayout>
 {
-    public Expression<Func<Song, ISongLayout>> Projection => GetProjection();
+    private readonly IDataTransformer<Genre, IGenreMinifiedLayout> _genreTransformer;
+    private readonly IDataTransformer<Performer, IPerformerMinifiedLayout> _performerTransformer;
 
-    private static Expression<Func<Song, ISongLayout>> GetProjection() => s => new SongLayout(s.Id, s.Name, s.Author);
+    public SongLayoutTransformer(IDataTransformer<Genre, IGenreMinifiedLayout> genreTransformer, IDataTransformer<Performer, IPerformerMinifiedLayout> performerTransformer)
+    {
+        this._genreTransformer = genreTransformer ?? throw new ArgumentNullException(nameof(genreTransformer));
+        this._performerTransformer = performerTransformer ?? throw new ArgumentNullException(nameof(performerTransformer));
+    }
+
+    public Expression<Func<Song, ISongLayout>> Projection => this.GetProjection();
+
+    private Expression<Func<Song, ISongLayout>> GetProjection() => s => new SongLayout(s.Id, s.Name, s.Genres.Project(this._genreTransformer), s.Performers.Project(this._performerTransformer));
 }

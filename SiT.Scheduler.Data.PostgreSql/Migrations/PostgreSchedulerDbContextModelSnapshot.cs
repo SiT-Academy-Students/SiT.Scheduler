@@ -19,13 +19,43 @@ namespace SiT.Scheduler.Data.PostgreSql.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("SiT.Scheduler.Data.Models.Song", b =>
+            modelBuilder.Entity("GenreSong", b =>
+                {
+                    b.Property<Guid>("GenresId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SongsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("GenresId", "SongsId");
+
+                    b.HasIndex("SongsId");
+
+                    b.ToTable("GenreSong");
+                });
+
+            modelBuilder.Entity("PerformerSong", b =>
+                {
+                    b.Property<Guid>("PerformersId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SongsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PerformersId", "SongsId");
+
+                    b.HasIndex("SongsId");
+
+                    b.ToTable("PerformerSong");
+                });
+
+            modelBuilder.Entity("SiT.Scheduler.Data.Models.Genre", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Author")
+                    b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -33,7 +63,65 @@ namespace SiT.Scheduler.Data.PostgreSql.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Genre");
+                });
+
+            modelBuilder.Entity("SiT.Scheduler.Data.Models.Performer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Performers");
+                });
+
+            modelBuilder.Entity("SiT.Scheduler.Data.Models.Song", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
                     b.ToTable("Songs");
+                });
+
+            modelBuilder.Entity("GenreSong", b =>
+                {
+                    b.HasOne("SiT.Scheduler.Data.Models.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SiT.Scheduler.Data.Models.Song", null)
+                        .WithMany()
+                        .HasForeignKey("SongsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PerformerSong", b =>
+                {
+                    b.HasOne("SiT.Scheduler.Data.Models.Performer", null)
+                        .WithMany()
+                        .HasForeignKey("PerformersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SiT.Scheduler.Data.Models.Song", null)
+                        .WithMany()
+                        .HasForeignKey("SongsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

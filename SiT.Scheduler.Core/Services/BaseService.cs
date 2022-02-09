@@ -1,4 +1,5 @@
 namespace SiT.Scheduler.Core.Services;
+
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -38,13 +39,11 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         var operationResult = new OperationResult<TLayout>();
         operationResult.ValidateNotNull(externalRequirement);
         operationResult.ValidateNotDefault(id);
-        if (!operationResult.IsSuccessful)
-            return operationResult;
+        if (!operationResult.IsSuccessful) return operationResult;
 
         var dataTransformer = this._dataTransformerFactory.ConstructTransformer<TEntity, TLayout>();
         operationResult.ValidateNotNull(dataTransformer, new UnsupportedLayoutError());
-        if (!operationResult.IsSuccessful)
-            return operationResult;
+        if (!operationResult.IsSuccessful) return operationResult;
 
         var idFilter = ConstructIdFilter(id);
         var externalRequirementFilter = this.ConstructFilter(externalRequirement);
@@ -54,54 +53,42 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         allFilters.AddRange(optionsFilters);
 
         var getLayout = await this._repository.GetAsync(allFilters, dataTransformer.Projection, cancellationToken);
-        if (!getLayout.IsSuccessful)
-            return operationResult.AppendErrors(getLayout);
+        if (!getLayout.IsSuccessful) return operationResult.AppendErrors(getLayout);
 
         operationResult.Data = getLayout.Data;
         return operationResult;
     }
 
-    public async Task<IOperationResult<IEnumerable<TLayout>>> GetManyAsync<TLayout>(TExternalRequirement externalRequirement, CancellationToken cancellationToken, IQueryEntityOptions<TEntity> options = null)
-    {
-        var operationResult = new OperationResult<IEnumerable<TLayout>>();
-        operationResult.ValidateNotNull(externalRequirement);
-        if (!operationResult.IsSuccessful)
-            return operationResult;
+    public Task<IOperationResult<IEnumerable<TLayout>>> GetManyAsync<TLayout>(TExternalRequirement externalRequirement, CancellationToken cancellationToken, IQueryEntityOptions<TEntity> options = null)
+        => this.GetManyInternallyAsync(
+            externalRequirement,
+            allFilters =>
+            {
+                var operationResult = new OperationResult<IEnumerable<TLayout>>();
 
-        var dataTransformer = this._dataTransformerFactory.ConstructTransformer<TEntity, TLayout>();
-        operationResult.ValidateNotNull(dataTransformer, new UnsupportedLayoutError());
-        if (!operationResult.IsSuccessful)
-            return operationResult;
+                var dataTransformer = this._dataTransformerFactory.ConstructTransformer<TEntity, TLayout>();
+                operationResult.ValidateNotNull(dataTransformer, new UnsupportedLayoutError());
+                if (!operationResult.IsSuccessful) return Task.FromResult<IOperationResult<IEnumerable<TLayout>>>(operationResult);
 
-        var externalRequirementFilter = this.ConstructFilter(externalRequirement);
-        var optionsFilters = (options?.AdditionalFilters).OrEmptyIfNull().IgnoreNullValues();
+                return this._repository.GetManyAsync(allFilters, dataTransformer.Projection, cancellationToken);
+            },
+            options);
 
-        var allFilters = new List<Expression<Func<TEntity, bool>>> { externalRequirementFilter };
-        allFilters.AddRange(optionsFilters);
-
-        var getLayouts = await this._repository.GetManyAsync(allFilters, dataTransformer.Projection, cancellationToken);
-        if (!getLayouts.IsSuccessful)
-            return operationResult.AppendErrors(getLayouts);
-
-        operationResult.Data = getLayouts.Data.OrEmptyIfNull();
-        return operationResult;
-    }
+    public Task<IOperationResult<IEnumerable<TEntity>>> GetManyAsync(TExternalRequirement externalRequirement, CancellationToken cancellationToken, IQueryEntityOptions<TEntity> options = null)
+        => this.GetManyInternallyAsync(externalRequirement, allFilters => this._repository.GetManyAsync(allFilters, cancellationToken), options);
 
     public async Task<IOperationResult<ICreateEntityResult>> CreateAsync(TPrototype prototype, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<ICreateEntityResult>();
         operationResult.ValidateNotNull(prototype);
-        if (!operationResult.IsSuccessful)
-            return operationResult;
+        if (!operationResult.IsSuccessful) return operationResult;
 
         var prepareEntity = await this.PrepareEntityAsync(prototype, () => this.InitializeEntity(prototype), cancellationToken);
-        if (!prepareEntity.IsSuccessful)
-            return operationResult.AppendErrors(prepareEntity);
+        if (!prepareEntity.IsSuccessful) return operationResult.AppendErrors(prepareEntity);
 
         var initializedEntity = prepareEntity.Data;
         var createEntity = await this._repository.CreateAsync(initializedEntity, cancellationToken);
-        if (!createEntity.IsSuccessful)
-            return operationResult.AppendErrors(createEntity);
+        if (!createEntity.IsSuccessful) return operationResult.AppendErrors(createEntity);
 
         operationResult.Data = new CreateEntityResult(initializedEntity.Id);
         return operationResult;
@@ -113,33 +100,28 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         operationResult.ValidateNotDefault(id);
         operationResult.ValidateNotNull(prototype);
 
-        if (!operationResult.IsSuccessful)
-            return operationResult;
+        if (!operationResult.IsSuccessful) return operationResult;
 
         var idFilter = ConstructIdFilter(id);
         var getExistingEntity = await this._repository.GetAsync(idFilter.AsEnumerable(), cancellationToken);
-        if (!getExistingEntity.IsSuccessful)
-            return operationResult.AppendErrors(getExistingEntity);
+        if (!getExistingEntity.IsSuccessful) return operationResult.AppendErrors(getExistingEntity);
 
         var existingEntity = getExistingEntity.Data;
         operationResult.ValidateNotNull(existingEntity, new EntityDoesNotExistError());
-        if (!operationResult.IsSuccessful)
-            return operationResult;
+        if (!operationResult.IsSuccessful) return operationResult;
 
         var prepareEntity = await this.PrepareEntityAsync(prototype, () => existingEntity, cancellationToken);
-        if (!prepareEntity.IsSuccessful)
-            return operationResult.AppendErrors(prepareEntity);
+        if (!prepareEntity.IsSuccessful) return operationResult.AppendErrors(prepareEntity);
 
         var updateEntity = await this._repository.UpdateAsync(existingEntity, cancellationToken);
-        if (!updateEntity.IsSuccessful)
-            return operationResult.AppendErrors(updateEntity);
+        if (!updateEntity.IsSuccessful) return operationResult.AppendErrors(updateEntity);
 
         return operationResult;
     }
 
     protected abstract Expression<Func<TEntity, bool>> ConstructFilter(TExternalRequirement externalRequirement);
     protected abstract TEntity InitializeEntity([NotNull] TPrototype prototype);
-    protected abstract void ApplyPrototype([NotNull] TPrototype prototype, [NotNull] TEntity entity);
+    protected abstract Task<IOperationResult> ApplyPrototypeAsync([NotNull] TPrototype prototype, [NotNull] TEntity entity, CancellationToken cancellationToken);
 
     private static Expression<Func<TEntity, bool>> ConstructIdFilter(Guid id) => x => x.Id == id;
 
@@ -153,19 +135,42 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
 
         var prototypeValidator = this._entityValidatorFactory.BuildValidator<TPrototype>();
         var validatePrototype = await prototypeValidator.ValidateAsync(prototype, cancellationToken);
-        if (!validatePrototype.IsSuccessful)
-            return operationResult.AppendErrors(validatePrototype);
+        if (!validatePrototype.IsSuccessful) return operationResult.AppendErrors(validatePrototype);
 
         var entity = getEntity();
         operationResult.ValidateNotNull(entity);
         if (!operationResult.IsSuccessful) return operationResult;
 
-        this.ApplyPrototype(prototype, entity);
+        var applyPrototype = await this.ApplyPrototypeAsync(prototype, entity, cancellationToken);
+        if (!applyPrototype.IsSuccessful) return operationResult.AppendErrors(applyPrototype);
+
         var entityValidator = this._entityValidatorFactory.BuildValidator<TEntity>();
         var validateEntity = await entityValidator.ValidateAsync(entity, cancellationToken);
-        if (!validateEntity.IsSuccessful)
-            return operationResult.AppendErrors(validateEntity);
+        if (!validateEntity.IsSuccessful) return operationResult.AppendErrors(validateEntity);
 
+        operationResult.Data = entity;
+        return operationResult;
+    }
+
+    private async Task<IOperationResult<IEnumerable<TResult>>> GetManyInternallyAsync<TResult>(
+        TExternalRequirement externalRequirement,
+        Func<IEnumerable<Expression<Func<TEntity, bool>>>, Task<IOperationResult<IEnumerable<TResult>>>> getEntities,
+        IQueryEntityOptions<TEntity> options = null)
+    {
+        var operationResult = new OperationResult<IEnumerable<TResult>>();
+        operationResult.ValidateNotNull(externalRequirement);
+        if (!operationResult.IsSuccessful) return operationResult;
+
+        var externalRequirementFilter = this.ConstructFilter(externalRequirement);
+        var optionsFilters = (options?.AdditionalFilters).OrEmptyIfNull().IgnoreNullValues();
+
+        var allFilters = new List<Expression<Func<TEntity, bool>>> { externalRequirementFilter };
+        allFilters.AddRange(optionsFilters);
+
+        var getResult = await getEntities(allFilters);
+        if (!getResult.IsSuccessful) return operationResult.AppendErrors(getResult);
+
+        operationResult.Data = getResult.Data.OrEmptyIfNull();
         return operationResult;
     }
 }

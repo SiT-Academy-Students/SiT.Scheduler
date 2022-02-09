@@ -1,9 +1,11 @@
 namespace SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using System;
+using System.Collections.Generic;
 
 public interface ISongLayout
 {
-    public Guid Id { get; }
-    public string Name { get; }
-    public string Author { get; }
+    Guid Id { get; }
+    string Name { get; }
+    IReadOnlyCollection<IGenreMinifiedLayout> Genres { get; }
+    IReadOnlyCollection<IPerformerMinifiedLayout> Performers { get; }
 }

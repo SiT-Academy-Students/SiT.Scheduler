@@ -8,6 +8,5 @@ public class SongEqualizationProfile : ComplexEqualizationProfile<Song, Song>
     {
         this.Equalize(s => s.Id, s => s.Id);
         this.Equalize(s => s.Name, s => s.Name);
-        this.Equalize(s => s.Author, s => s.Author);
     }
 }

@@ -10,6 +10,5 @@ public class SongRandomizer : ComplexRandomizer<Song>
     {
         this.AddRandomizationRule(s => s.Id, new GuidRandomizer());
         this.AddRandomizationRule(s => s.Name, new StringRandomizer());
-        this.AddRandomizationRule(s => s.Author, new StringRandomizer());
     }
 }
