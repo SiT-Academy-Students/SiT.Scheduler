@@ -11,8 +11,6 @@ using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using SiT.Scheduler.Core.Contracts.Services;
 using SiT.Scheduler.Core.OperativeModels.ExternalRequirements;
 using SiT.Scheduler.Core.OperativeModels.Prototype;
-using SiT.Scheduler.Core.Options;
-using SiT.Scheduler.Data.Models;
 using SiT.Scheduler.Utilities;
 
 [ApiController]
@@ -20,15 +18,11 @@ using SiT.Scheduler.Utilities;
 public class SongController : ControllerBase
 {
     private readonly ISongService _songService;
-    private readonly IGenreService _genreService;
-    private readonly IPerformerService _performerService;
     private readonly ISongFactory _songFactory;
 
-    public SongController(ISongService songService, IGenreService genreService, IPerformerService performerService, ISongFactory songFactory)
+    public SongController(ISongService songService, ISongFactory songFactory)
     {
         this._songService = songService ?? throw new ArgumentNullException(nameof(songService));
-        this._genreService = genreService ?? throw new ArgumentNullException(nameof(genreService));
-        this._performerService = performerService ?? throw new ArgumentNullException(nameof(performerService));
         this._songFactory = songFactory ?? throw new ArgumentNullException(nameof(songFactory));
     }
 
