@@ -37,17 +37,7 @@ public class SongController : ControllerBase
     {
         if (inputModel is null) return this.BadRequest("Invalid input model.");
 
-        var queryGenresOptions = new QueryEntityOptions<Genre>();
-        queryGenresOptions.AddFilter(x => inputModel.Genres.Contains(x.Id));
-        var getGenres = await this._genreService.GetManyAsync(ExternalRequirement.Default, cancellationToken, queryGenresOptions);
-        if (!getGenres.IsSuccessful) return this.BadRequest(getGenres.ToString());
-
-        var queryPerformersOptions = new QueryEntityOptions<Performer>();
-        queryPerformersOptions.AddFilter(x => inputModel.Performers.Contains(x.Id));
-        var getPerformers = await this._performerService.GetManyAsync(ExternalRequirement.Default, cancellationToken, queryPerformersOptions);
-        if (!getPerformers.IsSuccessful) return this.BadRequest(getPerformers.ToString());
-
-        var prototype = new SongPrototype(inputModel.Name, getGenres.Data, getPerformers.Data);
+        var prototype = new SongPrototype(inputModel.Name, inputModel.Genres, inputModel.Performers);
         var createSong = await this._songService.CreateAsync(prototype, cancellationToken);
         if (!createSong.IsSuccessful)
             return this.BadRequest(createSong.ToString());

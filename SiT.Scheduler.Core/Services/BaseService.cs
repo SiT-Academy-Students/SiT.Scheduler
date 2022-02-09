@@ -121,7 +121,7 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
 
     protected abstract Expression<Func<TEntity, bool>> ConstructFilter(TExternalRequirement externalRequirement);
     protected abstract TEntity InitializeEntity([NotNull] TPrototype prototype);
-    protected abstract void ApplyPrototype([NotNull] TPrototype prototype, [NotNull] TEntity entity);
+    protected abstract Task<IOperationResult> ApplyPrototypeAsync([NotNull] TPrototype prototype, [NotNull] TEntity entity, CancellationToken cancellationToken);
 
     private static Expression<Func<TEntity, bool>> ConstructIdFilter(Guid id) => x => x.Id == id;
 
@@ -141,7 +141,9 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         operationResult.ValidateNotNull(entity);
         if (!operationResult.IsSuccessful) return operationResult;
 
-        this.ApplyPrototype(prototype, entity);
+        var applyPrototype = await this.ApplyPrototypeAsync(prototype, entity, cancellationToken);
+        if (!applyPrototype.IsSuccessful) return operationResult.AppendErrors(applyPrototype);
+
         var entityValidator = this._entityValidatorFactory.BuildValidator<TEntity>();
         var validateEntity = await entityValidator.ValidateAsync(entity, cancellationToken);
         if (!validateEntity.IsSuccessful) return operationResult.AppendErrors(validateEntity);

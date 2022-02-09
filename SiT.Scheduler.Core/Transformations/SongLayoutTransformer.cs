@@ -1,7 +1,6 @@
 namespace SiT.Scheduler.Core.Transformations;
 
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using SiT.Scheduler.Core.Contracts.Transformations;
