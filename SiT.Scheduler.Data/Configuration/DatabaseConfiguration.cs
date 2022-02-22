@@ -1,4 +1,5 @@
-namespace SiT.Scheduler.Core.Configuration;
+namespace SiT.Scheduler.Data.Configuration;
+
 using JetBrains.Annotations;
 
 public class DatabaseConfiguration
