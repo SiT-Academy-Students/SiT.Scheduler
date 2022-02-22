@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiT.Scheduler.API.Extensions;
 using SiT.Scheduler.StorageManagement.Contracts;
 
 [ApiController]
@@ -25,8 +26,7 @@ public class StorageController : ControllerBase
     {
         var fileContent = this.Request.Body;
         var uploadFile = await this._storageManager.UploadFileAsync(fileContent, cancellationToken);
-        if (!uploadFile.IsSuccessful)
-            return this.BadRequest(uploadFile.ToString());
+        if (!uploadFile.IsSuccessful) return this.Error(uploadFile);
 
         return this.Ok(uploadFile.Data.Url);
     }
@@ -38,8 +38,7 @@ public class StorageController : ControllerBase
 
         await using var fileContent = file.OpenReadStream();
         var uploadFile = await this._storageManager.UploadFileAsync(fileContent, cancellationToken);
-        if (!uploadFile.IsSuccessful)
-            return this.BadRequest(uploadFile.ToString());
+        if (!uploadFile.IsSuccessful) return this.Error(uploadFile);
 
         return this.Ok(uploadFile.Data.Url);
     }
