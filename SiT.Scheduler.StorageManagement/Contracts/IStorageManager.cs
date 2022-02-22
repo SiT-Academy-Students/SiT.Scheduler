@@ -4,5 +4,5 @@ using SiT.Scheduler.Utilities.OperationResults;
 
 public interface IStorageManager
 {
-    Task<IOperationResult<IFileUploadResult>> UploadFileAsync(string fileName, Stream file, CancellationToken cancellationToken);
+    Task<IOperationResult<IFileUploadResult>> UploadFileAsync(Stream file, CancellationToken cancellationToken);
 }

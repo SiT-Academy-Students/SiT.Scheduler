@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +9,12 @@ using SiT.Scheduler.Data.Configuration;
 using SiT.Scheduler.StorageManagement.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.local.json", optional: true);
+builder.Services.Configure<FormOptions>(
+    formOptions =>
+    {
+        formOptions.MultipartBodyLengthLimit = 100 * 1024 * 1024;
+    });
 
 var databaseConfiguration = builder.Configuration.GetSection(DatabaseConfiguration.Section).Get<DatabaseConfiguration>();
 builder.Services.SetupDatabase(databaseConfiguration);

@@ -21,19 +21,19 @@ public class CloudinaryStorageManager : IStorageManager
         this._assetFolder = config.AssetFolder;
     }
 
-    public async Task<IOperationResult<IFileUploadResult>> UploadFileAsync(string fileName, Stream file, CancellationToken cancellationToken)
+    public async Task<IOperationResult<IFileUploadResult>> UploadFileAsync(Stream file, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<IFileUploadResult>();
-        operationResult.ValidateNotNull(fileName);
         operationResult.ValidateNotNull(file);
         if (!operationResult.IsSuccessful) return operationResult;
 
-        var rawUploadParams = new RawUploadParams { File = new FileDescription(fileName, file), AssetFolder = this.GetAssetFolder() };
+        var rawUploadParams = new RawUploadParams { File = new FileDescription("file_name", file), Folder = this.GetAssetFolder() };
 
         try
         {
             var uploadResult = await this._cloudinary.UploadAsync(rawUploadParams, cancellationToken: cancellationToken);
-            operationResult.Data = new FileUploadResult(uploadResult.SecureUrl.AbsoluteUri);
+            if (uploadResult.Error != null) operationResult.AddError(new StandardError(uploadResult.Error.Message));
+            else operationResult.Data = new FileUploadResult(uploadResult.SecureUrl.AbsoluteUri);
         }
         catch (Exception e)
         {

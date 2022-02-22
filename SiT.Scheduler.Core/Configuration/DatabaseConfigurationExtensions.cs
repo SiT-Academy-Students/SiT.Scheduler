@@ -15,10 +15,8 @@ public static class DatabaseConfigurationExtensions
         if (services is null) throw new ArgumentNullException(nameof(services));
         if (databaseConfiguration is null) throw new ArgumentNullException(nameof(databaseConfiguration));
 
-        if (string.Equals(databaseConfiguration.Provider, "postgre", StringComparison.InvariantCultureIgnoreCase))
-            services.SetupPostgreSql(databaseConfiguration.ConnectionString);
-        else
-            throw new InvalidOperationException("Invalid database provider.");
+        if (string.Equals(databaseConfiguration.Provider, "postgre", StringComparison.InvariantCultureIgnoreCase)) services.SetupPostgreSql(databaseConfiguration.ConnectionString);
+        else throw new InvalidOperationException("Invalid database provider.");
     }
 
     private static void SetupPostgreSql([NotNull] this IServiceCollection services, string connectionString)

@@ -9,3 +9,5 @@
 *.DotSettings.user
 
 TestResults/
+
+appsettings.local.json

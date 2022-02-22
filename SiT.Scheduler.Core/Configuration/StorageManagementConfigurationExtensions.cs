@@ -12,14 +12,14 @@ using SiT.Scheduler.StorageManagement.Contracts;
 
 public static class StorageManagementConfigurationExtensions
 {
-    public static void SetupStorageManagement([NotNull] this IServiceCollection services, [NotNull] StorageManagementConfiguration storageManagementConfiguration, [NotNull] IConfiguration configuration)
+    public static void SetupStorageManagement([NotNull] this IServiceCollection services, [CanBeNull] StorageManagementConfiguration storageManagementConfiguration, [NotNull] IConfiguration configuration)
     {
         if (services is null) throw new ArgumentNullException(nameof(services));
-        if (storageManagementConfiguration is null) throw new ArgumentNullException(nameof(storageManagementConfiguration));
         if (configuration is null) throw new ArgumentNullException(nameof(configuration));
 
-        if (string.Equals(storageManagementConfiguration.Provider, "cloudinary", StringComparison.InvariantCultureIgnoreCase)) services.SetupCloudinary(configuration);
-        else services.SetupFallbackStorageManagement();
+        if (storageManagementConfiguration is null) services.SetupFallbackStorageManagement();
+        else if (string.Equals(storageManagementConfiguration.Provider, "cloudinary", StringComparison.InvariantCultureIgnoreCase)) services.SetupCloudinary(configuration);
+        else throw new InvalidOperationException("Invalid storage management provider");
     }
 
     private static void SetupCloudinary([NotNull] this IServiceCollection services, [NotNull] IConfiguration configuration)
