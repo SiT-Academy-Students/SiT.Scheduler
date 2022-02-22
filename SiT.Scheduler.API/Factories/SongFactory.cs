@@ -10,11 +10,13 @@ public class SongFactory : ISongFactory
 {
     private readonly IGenreFactory _genreFactory;
     private readonly IPerformerFactory _performerFactory;
+    private readonly ICategoryFactory _categoryFactory;
 
-    public SongFactory(IGenreFactory genreFactory, IPerformerFactory performerFactory)
+    public SongFactory(IGenreFactory genreFactory, IPerformerFactory performerFactory, ICategoryFactory categoryFactory)
     {
         this._genreFactory = genreFactory ?? throw new ArgumentNullException(nameof(genreFactory));
         this._performerFactory = performerFactory ?? throw new ArgumentNullException(nameof(performerFactory));
+        this._categoryFactory = categoryFactory ?? throw new ArgumentNullException(nameof(categoryFactory));
     }
 
     public SongViewModel ToViewModel(ISongLayout layout)
@@ -37,6 +39,12 @@ public class SongFactory : ISongFactory
         {
             var performerViewModel = this._performerFactory.ToViewModel(performer);
             if (performerViewModel is not null) viewModel.AddPerformer(performerViewModel);
+        }
+
+        foreach (var category in layout.Categories.OrEmptyIfNull().IgnoreNullValues())
+        {
+            var categoryViewModel = this._categoryFactory.ToViewModel(category);
+            if (categoryViewModel is not null) viewModel.AddCategory(categoryViewModel);
         }
 
         return viewModel;

@@ -8,4 +8,5 @@ public interface ISongPrototype
     string Name { get; }
     IReadOnlyCollection<Guid> Genres { get; }
     IReadOnlyCollection<Guid> Performers { get; }
+    IReadOnlyCollection<Guid> Categories { get; }
 }

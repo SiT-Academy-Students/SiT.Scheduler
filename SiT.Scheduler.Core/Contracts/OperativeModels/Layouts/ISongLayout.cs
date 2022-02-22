@@ -8,4 +8,5 @@ public interface ISongLayout
     string Name { get; }
     IReadOnlyCollection<IGenreMinifiedLayout> Genres { get; }
     IReadOnlyCollection<IPerformerMinifiedLayout> Performers { get; }
+    IReadOnlyCollection<ICategoryMinifiedLayout> Categories { get; }
 }

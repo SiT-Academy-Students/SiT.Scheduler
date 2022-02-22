@@ -14,4 +14,7 @@ public class SongInputModel
 
     [UsedImplicitly(ImplicitUseKindFlags.Assign)]
     public IEnumerable<Guid> Performers { get; set; }
+
+    [UsedImplicitly(ImplicitUseKindFlags.Assign)]
+    public IEnumerable<Guid> Categories { get; set; }
 }
