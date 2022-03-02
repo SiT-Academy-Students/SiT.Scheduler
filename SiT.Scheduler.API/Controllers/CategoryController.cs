@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SiT.Scheduler.API.Contracts.Factories;
+using SiT.Scheduler.API.Extensions;
 using SiT.Scheduler.API.ViewModels.Category;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using SiT.Scheduler.Core.Contracts.Services;
@@ -33,8 +34,7 @@ public class CategoryController : ControllerBase
 
         var prototype = new CategoryPrototype(inputModel.Name, inputModel.Description);
         var createCategory = await this._categoryService.CreateAsync(prototype, cancellationToken);
-        if (!createCategory.IsSuccessful)
-            return this.BadRequest(createCategory.ToString());
+        if (!createCategory.IsSuccessful) return this.Error(createCategory);
 
         return this.Ok(createCategory.Data);
     }
@@ -43,8 +43,7 @@ public class CategoryController : ControllerBase
     public async Task<IActionResult> GetManyAsync(CancellationToken cancellationToken)
     {
         var getCategories = await this._categoryService.GetManyAsync<ICategoryMinifiedLayout>(ExternalRequirement.Default, cancellationToken);
-        if (!getCategories.IsSuccessful)
-            return this.BadRequest(getCategories.ToString());
+        if (!getCategories.IsSuccessful) return this.Error(getCategories);
 
         var viewModels = getCategories.Data.OrEmptyIfNull().IgnoreNullValues().Select(this._categoryFactory.ToViewModel);
         return this.Ok(viewModels);
