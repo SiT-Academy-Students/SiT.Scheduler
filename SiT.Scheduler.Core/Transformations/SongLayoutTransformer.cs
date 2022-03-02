@@ -17,7 +17,7 @@ public class SongLayoutTransformer : IDataTransformer<Song, ISongLayout>
     {
         this._genreTransformer = genreTransformer ?? throw new ArgumentNullException(nameof(genreTransformer));
         this._performerTransformer = performerTransformer ?? throw new ArgumentNullException(nameof(performerTransformer));
-        this._categoryTransformer = categoryTransformer ?? throw new ArgumentException(nameof(categoryTransformer));
+        this._categoryTransformer = categoryTransformer ?? throw new ArgumentNullException(nameof(categoryTransformer));
     }
 
     public Expression<Func<Song, ISongLayout>> Projection => this.GetProjection();
