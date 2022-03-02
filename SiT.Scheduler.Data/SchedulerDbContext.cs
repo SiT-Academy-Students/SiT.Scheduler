@@ -31,5 +31,13 @@ public class SchedulerDbContext : DbContext
         modelBuilder.Entity<Genre>()
             .HasMany(g => g.Songs)
             .WithMany(s => s.Genres);
+        
+        modelBuilder.Entity<Song>()
+            .HasMany(s => s.Categories)
+            .WithMany(c => c.Songs);
+
+        modelBuilder.Entity<Category>()
+            .HasMany(c => c.Songs)
+            .WithMany(s => s.Categories);
     }  
 }

@@ -20,12 +20,14 @@ public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongP
 {
     private readonly IGenreService _genreService;
     private readonly IPerformerService _performerService;
+    private readonly ICategoryService _categoryService;
 
-    public SongService(IRepository<Song> repository, IGenreService genreService, IPerformerService performerService, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory)
+    public SongService(IRepository<Song> repository, IGenreService genreService, IPerformerService performerService, ICategoryService categoryService, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory)
         : base(repository, entityValidatorFactory, dataTransformerFactory)
     {
         this._genreService = genreService ?? throw new ArgumentNullException(nameof(genreService));
         this._performerService = performerService ?? throw new ArgumentNullException(nameof(performerService));
+        this._categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
     }
 
     protected override Song InitializeEntity(ISongPrototype prototype) => new();
@@ -44,12 +46,20 @@ public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongP
         var getPerformers = await this._performerService.GetManyAsync(ExternalRequirement.Default, cancellationToken, queryPerformersOptions);
         if (!getPerformers.IsSuccessful) return operationResult.AppendErrors(getPerformers);
 
+        var queryCategoriesOptions = new QueryEntityOptions<Category>();
+        queryCategoriesOptions.AddFilter(x => prototype.Categories.Contains(x.Id));
+        var getCategories = await this._categoryService.GetManyAsync(ExternalRequirement.Default, cancellationToken, queryCategoriesOptions);
+        if (!getCategories.IsSuccessful) return operationResult.AppendErrors(getCategories);
+
         entity.Name = prototype.Name;
         entity.Genres.Clear();
         foreach (var genre in getGenres.Data.OrEmptyIfNull().IgnoreNullValues()) entity.Genres.Add(genre);
 
         entity.Performers.Clear();
         foreach (var performer in getPerformers.Data.OrEmptyIfNull().IgnoreNullValues()) entity.Performers.Add(performer);
+
+        entity.Categories.Clear();
+        foreach (var category in getCategories.Data.OrEmptyIfNull().IgnoreNullValues()) entity.Categories.Add(category);
 
         return operationResult;
     }

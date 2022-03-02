@@ -13,22 +13,24 @@ using SiT.Scheduler.Data.Models;
 using SiT.Scheduler.Utilities.OperationResults;
 using SiT.Scheduler.Validation.Contracts;
 
-public class PerformerService : BaseService<Performer, IDefaultExternalRequirement, IPerformerPrototype>, IPerformerService
+public class CategoryService : BaseService<Category, IDefaultExternalRequirement, ICategoryPrototype>, ICategoryService
 {
-    public PerformerService(IRepository<Performer> repository, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory) 
+    public CategoryService(IRepository<Category> repository, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory)
         : base(repository, entityValidatorFactory, dataTransformerFactory)
     {
     }
 
-    protected override Performer InitializeEntity(IPerformerPrototype prototype) => new ();
+    protected override Category InitializeEntity(ICategoryPrototype prototype) => new();
 
-    protected override Task<IOperationResult> ApplyPrototypeAsync(IPerformerPrototype prototype, Performer entity, CancellationToken cancellationToken)
+    protected override Task<IOperationResult> ApplyPrototypeAsync(ICategoryPrototype prototype, Category entity, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult();
+
         entity.Name = prototype.Name;
+        entity.Description = prototype.Description;
 
         return Task.FromResult<IOperationResult>(operationResult);
     }
 
-    protected override Expression<Func<Performer, bool>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => null;
+    protected override Expression<Func<Category, bool>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => null;
 }

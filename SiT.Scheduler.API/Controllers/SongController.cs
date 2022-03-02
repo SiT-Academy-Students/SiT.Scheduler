@@ -32,7 +32,7 @@ public class SongController : ControllerBase
     {
         if (inputModel is null) return this.BadRequest("Invalid input model.");
 
-        var prototype = new SongPrototype(inputModel.Name, inputModel.Genres, inputModel.Performers);
+        var prototype = new SongPrototype(inputModel.Name, inputModel.Genres, inputModel.Performers, inputModel.Categories);
         var createSong = await this._songService.CreateAsync(prototype, cancellationToken);
         if (!createSong.IsSuccessful) return this.Error(createSong);
 
