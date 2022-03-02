@@ -43,7 +43,7 @@ public class SongController : ControllerBase
     public async Task<IActionResult> GetManyAsync(CancellationToken cancellationToken)
     {
         var getSongs = await this._songService.GetManyAsync<ISongLayout>(ExternalRequirement.Default, cancellationToken);
-        if (!getSongs.IsSuccessful) return this.BadRequest(getSongs);
+        if (!getSongs.IsSuccessful) return this.Error(getSongs);
 
         var viewModels = getSongs.Data.OrEmptyIfNull().IgnoreNullValues().Select(this._songFactory.ToViewModel);
         return this.Ok(viewModels);
