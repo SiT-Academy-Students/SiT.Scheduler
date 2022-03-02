@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SiT.Scheduler.API.Contracts.Factories;
+using SiT.Scheduler.API.Extensions;
 using SiT.Scheduler.API.ViewModels.Genre;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using SiT.Scheduler.Core.Contracts.Services;
@@ -33,8 +34,7 @@ public class GenreController : ControllerBase
 
         var prototype = new GenrePrototype(inputModel.Name, inputModel.Description);
         var createGenre = await this._genreService.CreateAsync(prototype, cancellationToken);
-        if (!createGenre.IsSuccessful)
-            return this.BadRequest(createGenre.ToString());
+        if (!createGenre.IsSuccessful) return this.Error(createGenre);
 
         return this.Ok(createGenre.Data);
     }
@@ -43,8 +43,7 @@ public class GenreController : ControllerBase
     public async Task<IActionResult> GetManyAsync(CancellationToken cancellationToken)
     {
         var getGenres = await this._genreService.GetManyAsync<IGenreMinifiedLayout>(ExternalRequirement.Default, cancellationToken);
-        if (!getGenres.IsSuccessful)
-            return this.BadRequest(getGenres.ToString());
+        if (!getGenres.IsSuccessful) return this.Error(getGenres);
 
         var viewModels = getGenres.Data.OrEmptyIfNull().IgnoreNullValues().Select(this._genreFactory.ToViewModel);
         return this.Ok(viewModels);

@@ -13,6 +13,8 @@
         <ProjectReference Include="..\SiT.Scheduler.Data.PostgreSql\SiT.Scheduler.Data.PostgreSql.csproj" />
         <ProjectReference Include="..\SiT.Scheduler.Data\SiT.Scheduler.Data.csproj" />
         <ProjectReference Include="..\SiT.Scheduler.DI\SiT.Scheduler.DI.csproj" />
+        <ProjectReference Include="..\SiT.Scheduler.StorageManagement.CloudinaryImpl\SiT.Scheduler.StorageManagement.CloudinaryImpl.csproj" />
+        <ProjectReference Include="..\SiT.Scheduler.StorageManagement\SiT.Scheduler.StorageManagement.csproj" />
         <ProjectReference Include="..\SiT.Scheduler.Validation\SiT.Scheduler.Validation.csproj" />
     </ItemGroup>
 

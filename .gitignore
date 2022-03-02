@@ -10,3 +10,5 @@
 *.csproj.user
 
 TestResults/
+
+appsettings.local.json

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SiT.Scheduler.API.Contracts.Factories;
+using SiT.Scheduler.API.Extensions;
 using SiT.Scheduler.API.ViewModels.Performer;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using SiT.Scheduler.Core.Contracts.Services;
@@ -33,8 +34,7 @@ public class PerformerController : ControllerBase
 
         var prototype = new PerformerPrototype(inputModel.Name);
         var createPerformer = await this._performerService.CreateAsync(prototype, cancellationToken);
-        if (!createPerformer.IsSuccessful)
-            return this.BadRequest(createPerformer.ToString());
+        if (!createPerformer.IsSuccessful) return this.Error(createPerformer);
 
         return this.Ok(createPerformer.Data);
     }
@@ -43,8 +43,7 @@ public class PerformerController : ControllerBase
     public async Task<IActionResult> GetManyAsync(CancellationToken cancellationToken)
     {
         var getPerformers = await this._performerService.GetManyAsync<IPerformerMinifiedLayout>(ExternalRequirement.Default, cancellationToken);
-        if (!getPerformers.IsSuccessful)
-            return this.BadRequest(getPerformers.ToString());
+        if (!getPerformers.IsSuccessful) return this.Error(getPerformers);
 
         var viewModels = getPerformers.Data.OrEmptyIfNull().IgnoreNullValues().Select(this._performerFactory.ToViewModel);
         return this.Ok(viewModels);
