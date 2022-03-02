@@ -7,5 +7,6 @@
 [Oo]bj/
 .vs/
 *.DotSettings.user
+*.csproj.user
 
 TestResults/
