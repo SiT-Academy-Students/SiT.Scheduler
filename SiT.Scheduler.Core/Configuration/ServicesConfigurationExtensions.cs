@@ -28,6 +28,7 @@ public static class ServicesConfigurationExtensions
         // Register all services.
         services.AddScoped<ISongService, SongService>();
         services.AddScoped<IGenreService, GenreService>();
+        services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IPerformerService, PerformerService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddTransient<IDataTransformerFactory, DataTransformerFactory>();
