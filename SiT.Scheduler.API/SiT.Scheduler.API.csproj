@@ -16,6 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SiT.Scheduler.Core\SiT.Scheduler.Core.csproj" />
+        <ProjectReference Include="..\SiT.Scheduler.Organization\SiT.Scheduler.Organization.csproj" />
     </ItemGroup>
 
     <ItemGroup>

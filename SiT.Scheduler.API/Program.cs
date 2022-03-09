@@ -9,6 +9,7 @@ using Microsoft.Identity.Web;
 using SiT.Scheduler.API.Configuration;
 using SiT.Scheduler.Core.Configuration;
 using SiT.Scheduler.Data.Configuration;
+using SiT.Scheduler.Organization.Configuration;
 using SiT.Scheduler.StorageManagement.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,7 @@ builder.Services.SetupStorageManagement(storageManagementConfiguration, builder.
 
 builder.Services.RegisterServices();
 builder.Services.RegisterFactories();
+builder.Services.ConfigureGraphConnection(builder.Configuration);
 
 builder.Services.AddControllers();
 
