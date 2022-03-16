@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using SiT.Scheduler.API.Configuration;
+using SiT.Scheduler.API.Middlewares;
 using SiT.Scheduler.Core.Configuration;
 using SiT.Scheduler.Data.Configuration;
 using SiT.Scheduler.Organization.Configuration;
@@ -67,6 +68,7 @@ else
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuthenticationContext();
 
 app.MapControllers();
 

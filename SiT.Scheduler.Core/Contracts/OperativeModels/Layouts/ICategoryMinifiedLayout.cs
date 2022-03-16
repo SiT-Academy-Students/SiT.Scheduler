@@ -1,10 +1,7 @@
 namespace SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 
-using System;
-
-public interface ICategoryMinifiedLayout
+public interface ICategoryMinifiedLayout : ILayout
 {
-    Guid Id { get; }
     string Name { get; }
     string Description { get; }
 }
