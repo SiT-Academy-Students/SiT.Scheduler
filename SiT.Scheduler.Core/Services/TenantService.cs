@@ -19,7 +19,7 @@ public class TenantService : BaseService<Tenant, IDefaultExternalRequirement, IT
     {
     }
 
-    protected override Expression<Func<Tenant, bool>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => null;
+    protected override OperationResult<Expression<Func<Tenant, bool>>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => new();
 
     protected override Tenant InitializeEntity(ITenantPrototype prototype) => new();
 

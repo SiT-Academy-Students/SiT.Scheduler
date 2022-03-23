@@ -135,4 +135,7 @@
   <data name="WrongFormat" xml:space="preserve">
     <value>Аргументът няма правилен формат.</value>
   </data>
+  <data name="MissingTenantContext" xml:space="preserve">
+      <value>Липсва контекстуална информация за текущия тенант.</value>
+  </data>
 </root>

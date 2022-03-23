@@ -11,4 +11,5 @@ public class Tenant : IEntity
     public bool IsSystem { get; set; }
 
     public ICollection<Identity> Identities { get; set; } = new List<Identity>();
+    public ICollection<Category> Categories { get; set; } = new List<Category>();
 }

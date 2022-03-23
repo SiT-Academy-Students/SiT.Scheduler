@@ -33,7 +33,10 @@ public class SchedulerDbContext : DbContext
         modelBuilder.Entity<Song>().HasMany(s => s.Categories).WithMany(c => c.Songs);
         modelBuilder.Entity<Category>().HasMany(c => c.Songs).WithMany(s => s.Categories);
 
-        modelBuilder.Entity<Identity>().HasMany(i => i.Tenants).WithMany(t => t.Identities);
         modelBuilder.Entity<Tenant>().HasMany(t => t.Identities).WithMany(i => i.Tenants);
+        modelBuilder.Entity<Identity>().HasMany(i => i.Tenants).WithMany(t => t.Identities);
+
+        modelBuilder.Entity<Tenant>().HasMany(t => t.Categories).WithOne(c => c.Tenant).HasForeignKey(c => c.TenantId);
+        modelBuilder.Entity<Category>().HasOne(c => c.Tenant).WithMany(t => t.Categories).HasForeignKey(c => c.TenantId);
     }
 }

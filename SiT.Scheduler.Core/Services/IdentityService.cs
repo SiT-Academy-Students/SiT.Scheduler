@@ -23,7 +23,7 @@ public class IdentityService : BaseService<Identity, IDefaultExternalRequirement
         this._tenantService = tenantService ?? throw new ArgumentNullException(nameof(tenantService));
     }
 
-    protected override Expression<Func<Identity, bool>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => null;
+    protected override OperationResult<Expression<Func<Identity, bool>>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => new();
 
     protected override Identity InitializeEntity(IIdentityPrototype prototype) => new();
 

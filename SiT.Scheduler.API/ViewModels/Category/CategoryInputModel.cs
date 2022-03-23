@@ -1,13 +1,12 @@
 namespace SiT.Scheduler.API.ViewModels.Category;
 
-using System;
 using JetBrains.Annotations;
 
 public class CategoryInputModel
 {
-    [UsedImplicitly(ImplicitUseKindFlags.Access)]
+    [UsedImplicitly(ImplicitUseKindFlags.Assign)]
     public string Name { get; set; }
 
-    [UsedImplicitly(ImplicitUseKindFlags.Access)]
+    [UsedImplicitly(ImplicitUseKindFlags.Assign)]
     public string Description { get; set; }
 }

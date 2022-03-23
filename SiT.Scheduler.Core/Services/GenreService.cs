@@ -32,5 +32,5 @@ public class GenreService : BaseService<Genre, IDefaultExternalRequirement, IGen
         return Task.FromResult<IOperationResult>(operationResult);
     }
 
-    protected override Expression<Func<Genre, bool>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => null;
+    protected override OperationResult<Expression<Func<Genre, bool>>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => new();
 }

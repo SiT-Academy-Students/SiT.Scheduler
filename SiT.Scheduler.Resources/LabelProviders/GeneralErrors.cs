@@ -13,4 +13,5 @@ public static class GeneralErrors
     public static string InvalidOperation => _resourceManager.GetString(nameof(InvalidOperation));
     public static string WrongFormat => _resourceManager.GetString(nameof(WrongFormat));
     public static string UnsupportedLayout => _resourceManager.GetString(nameof(UnsupportedLayout));
+    public static string MissingTenantContext => _resourceManager.GetString(nameof(MissingTenantContext));
 }

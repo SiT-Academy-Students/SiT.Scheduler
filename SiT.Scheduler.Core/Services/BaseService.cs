@@ -112,7 +112,7 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         return operationResult;
     }
 
-    protected abstract Expression<Func<TEntity, bool>> ConstructFilter(TExternalRequirement externalRequirement);
+    protected abstract OperationResult<Expression<Func<TEntity, bool>>> ConstructFilter(TExternalRequirement externalRequirement);
     protected abstract TEntity InitializeEntity([NotNull] TPrototype prototype);
     protected abstract Task<IOperationResult> ApplyPrototypeAsync([NotNull] TPrototype prototype, [NotNull] TEntity entity, CancellationToken cancellationToken);
 
@@ -168,8 +168,11 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         operationResult.ValidateNotDefault(id);
         if (!operationResult.IsSuccessful) return operationResult;
 
+        var constructExternalRequirementFilter = this.ConstructFilter(externalRequirement);
+        if (!constructExternalRequirementFilter.IsSuccessful) return operationResult.AppendErrors(constructExternalRequirementFilter);
+
         var idFilter = ConstructIdFilter(id);
-        var externalRequirementFilter = this.ConstructFilter(externalRequirement);
+        var externalRequirementFilter = constructExternalRequirementFilter.Data;
         var optionsFilters = (options?.AdditionalFilters).OrEmptyIfNull().IgnoreNullValues();
 
         var allFilters = new List<Expression<Func<TEntity, bool>>> { idFilter, externalRequirementFilter };
@@ -191,7 +194,10 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         operationResult.ValidateNotNull(externalRequirement);
         if (!operationResult.IsSuccessful) return operationResult;
 
-        var externalRequirementFilter = this.ConstructFilter(externalRequirement);
+        var constructExternalRequirementFilter = this.ConstructFilter(externalRequirement);
+        if (!constructExternalRequirementFilter.IsSuccessful) return operationResult.AppendErrors(constructExternalRequirementFilter);
+
+        var externalRequirementFilter = constructExternalRequirementFilter.Data;
         var optionsFilters = (options?.AdditionalFilters).OrEmptyIfNull().IgnoreNullValues();
 
         var allFilters = new List<Expression<Func<TEntity, bool>>> { externalRequirementFilter };

@@ -64,5 +64,5 @@ public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongP
         return operationResult;
     }
 
-    protected override Expression<Func<Song, bool>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => null;
+    protected override OperationResult<Expression<Func<Song, bool>>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => new();
 }
