@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiT.Scheduler.StorageManage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiT.Scheduler.StorageManagement.CloudinaryImpl", "SiT.Scheduler.StorageManagement.CloudinaryImpl\SiT.Scheduler.StorageManagement.CloudinaryImpl.csproj", "{B01E4F2A-E8FA-4637-ADE7-BB3873160469}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiT.Scheduler.Organization", "SiT.Scheduler.Organization\SiT.Scheduler.Organization.csproj", "{5C1B0F21-B722-422D-BEFD-E51B936CCC78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +98,10 @@ Global
 		{B01E4F2A-E8FA-4637-ADE7-BB3873160469}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B01E4F2A-E8FA-4637-ADE7-BB3873160469}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B01E4F2A-E8FA-4637-ADE7-BB3873160469}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C1B0F21-B722-422D-BEFD-E51B936CCC78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C1B0F21-B722-422D-BEFD-E51B936CCC78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C1B0F21-B722-422D-BEFD-E51B936CCC78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C1B0F21-B722-422D-BEFD-E51B936CCC78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,17 +12,32 @@ using SiT.Scheduler.Data.PostgreSql;
 namespace SiT.Scheduler.Data.PostgreSql.Migrations
 {
     [DbContext(typeof(PostgreSchedulerDbContext))]
-    [Migration("20220131180854_AddingGenreAndPerformer")]
-    partial class AddingGenreAndPerformer
+    [Migration("20220309180553_AddingGenrePerformerIdentity")]
+    partial class AddingGenrePerformerIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("CategorySong", b =>
+                {
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SongsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CategoriesId", "SongsId");
+
+                    b.HasIndex("SongsId");
+
+                    b.ToTable("CategorySong");
+                });
 
             modelBuilder.Entity("GenreSong", b =>
                 {
@@ -54,6 +69,23 @@ namespace SiT.Scheduler.Data.PostgreSql.Migrations
                     b.ToTable("PerformerSong");
                 });
 
+            modelBuilder.Entity("SiT.Scheduler.Data.Models.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("SiT.Scheduler.Data.Models.Genre", b =>
                 {
                     b.Property<Guid>("Id")
@@ -68,7 +100,21 @@ namespace SiT.Scheduler.Data.PostgreSql.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genre");
+                    b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("SiT.Scheduler.Data.Models.Identity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Identities");
                 });
 
             modelBuilder.Entity("SiT.Scheduler.Data.Models.Performer", b =>
@@ -97,6 +143,21 @@ namespace SiT.Scheduler.Data.PostgreSql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Songs");
+                });
+
+            modelBuilder.Entity("CategorySong", b =>
+                {
+                    b.HasOne("SiT.Scheduler.Data.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SiT.Scheduler.Data.Models.Song", null)
+                        .WithMany()
+                        .HasForeignKey("SongsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GenreSong", b =>

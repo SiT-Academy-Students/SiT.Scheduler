@@ -3,6 +3,8 @@ namespace SiT.Scheduler.Core.Configuration;
 using System;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using SiT.Scheduler.Core.Authentication;
+using SiT.Scheduler.Core.Contracts.Authentication;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Prototypes;
 using SiT.Scheduler.Core.Contracts.Services;
@@ -28,12 +30,18 @@ public static class ServicesConfigurationExtensions
         // Register all services.
         services.AddScoped<ISongService, SongService>();
         services.AddScoped<IGenreService, GenreService>();
+        services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IPerformerService, PerformerService>();
+        services.AddScoped<ICategoryService, CategoryService>();
         services.AddTransient<IDataTransformerFactory, DataTransformerFactory>();
         services.AddTransient<IDependenciesAccessor, DependenciesAccessor>();
         services.AddSingleton<IDataTransformer<Song, ISongLayout>, SongLayoutTransformer>();
         services.AddSingleton<IDataTransformer<Genre, IGenreMinifiedLayout>, GenreMinifiedLayoutTransformer>();
         services.AddSingleton<IDataTransformer<Performer, IPerformerMinifiedLayout>, PerformerMinifiedLayoutTransformer>();
+        services.AddSingleton<IDataTransformer<Category, ICategoryMinifiedLayout>, CategoryMinifiedLayoutTransformer>();
+        services.AddSingleton<IDataTransformer<Identity, IIdentityAuthenticationLayout>, IdentityAuthenticationLayoutTransformer>();
+
+        services.AddScoped<IAuthenticationContext, AuthenticationContext>();
 
         // Register all repositories.
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -42,6 +50,9 @@ public static class ServicesConfigurationExtensions
         services.AddScoped<IEntityValidatorFactory, EntityValidatorFactory>();
         services.AddScoped(typeof(IEntityValidator<>), typeof(EntityValidator<>));
 
+        services.AddSingleton<IValidator<ICategoryPrototype>, CategoryPrototypeValidator>();
+        services.AddSingleton<IValidator<IGenrePrototype>, GenrePrototypeValidator>();
+        services.AddSingleton<IValidator<IPerformerPrototype>, PerformerPrototypeValidator>();
         services.AddSingleton<IValidator<ISongPrototype>, SongPrototypeValidator>();
     }
 }

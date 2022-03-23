@@ -10,6 +10,12 @@ public class SchedulerDbContext : DbContext
     {
     }
 
+    public DbSet<Category> Categories { get; set; }
+
+    public DbSet<Genre> Genres { get; set; }
+
+    public DbSet<Identity> Identities { get; set; }
+
     public DbSet<Song> Songs { get; set; }
 
     public DbSet<Performer> Performers { get; set;}

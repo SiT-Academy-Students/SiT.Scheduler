@@ -1,11 +1,16 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
 using SiT.Scheduler.API.Configuration;
+using SiT.Scheduler.API.Middlewares;
 using SiT.Scheduler.Core.Configuration;
 using SiT.Scheduler.Data.Configuration;
+using SiT.Scheduler.Organization.Configuration;
 using SiT.Scheduler.StorageManagement.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +21,22 @@ builder.Services.Configure<FormOptions>(
         formOptions.MultipartBodyLengthLimit = 100 * 1024 * 1024;
     });
 
+var b2cSection = builder.Configuration.GetSection("AzureAdB2C");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(b2cSection);
+
+builder.Services.AddAuthorization(
+    options =>
+    {
+        var policyBuilder = new AuthorizationPolicyBuilder();
+        policyBuilder.RequireAuthenticatedUser();
+        policyBuilder.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+        var defaultPolicy = policyBuilder.Build();
+
+        options.DefaultPolicy = defaultPolicy;
+        options.FallbackPolicy = defaultPolicy;
+    });
+
 var databaseConfiguration = builder.Configuration.GetSection(DatabaseConfiguration.Section).Get<DatabaseConfiguration>();
 builder.Services.SetupDatabase(databaseConfiguration);
 
@@ -24,6 +45,7 @@ builder.Services.SetupStorageManagement(storageManagementConfiguration, builder.
 
 builder.Services.RegisterServices();
 builder.Services.RegisterFactories();
+builder.Services.ConfigureGraphConnection(builder.Configuration);
 
 builder.Services.AddControllers();
 
@@ -39,8 +61,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseHttpsRedirection();
+}
 
-app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseAuthenticationContext();
+
 app.MapControllers();
 
 await app.RunAsync();

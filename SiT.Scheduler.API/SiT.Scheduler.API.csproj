@@ -5,6 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.Graph" Version="4.20.0" />
+        <PackageReference Include="Microsoft.Identity.Web" Version="1.23.0" />
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.35.0.42613">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -14,6 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SiT.Scheduler.Core\SiT.Scheduler.Core.csproj" />
+        <ProjectReference Include="..\SiT.Scheduler.Organization\SiT.Scheduler.Organization.csproj" />
     </ItemGroup>
 
     <ItemGroup>
