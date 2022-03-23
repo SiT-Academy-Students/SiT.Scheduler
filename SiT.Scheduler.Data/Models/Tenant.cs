@@ -10,5 +10,5 @@ public class Tenant : IEntity
     public string Name { get; set; }
     public bool IsSystem { get; set; }
 
-    public ICollection<Identity> Identities { get; set; }
+    public ICollection<Identity> Identities { get; set; } = new List<Identity>();
 }

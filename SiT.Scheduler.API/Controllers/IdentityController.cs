@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SiT.Scheduler.API.Extensions;
 using SiT.Scheduler.Core.Contracts.Services;
@@ -18,14 +19,19 @@ public class IdentityController : ControllerBase
     private readonly IGraphConnector _graphConnector;
 
     [NotNull]
+    private readonly ITenantService _tenantService;
+
+    [NotNull]
     private readonly IIdentityService _identityService;
 
-    public IdentityController([NotNull] IGraphConnector graphConnector, [NotNull] IIdentityService identityService)
+    public IdentityController([NotNull] IGraphConnector graphConnector, [NotNull] ITenantService tenantService, [NotNull] IIdentityService identityService)
     {
         this._graphConnector = graphConnector ?? throw new ArgumentNullException(nameof(graphConnector));
+        this._tenantService = tenantService ?? throw new ArgumentNullException(nameof(tenantService));
         this._identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
     }
 
+    [AllowAnonymous]
     [HttpPost("ensure")]
     public async Task<IActionResult> EnsureAsync(Guid userId, CancellationToken cancellationToken)
     {
@@ -35,10 +41,16 @@ public class IdentityController : ControllerBase
         var externalIdentity = getExternalUser.Data;
         if (externalIdentity is null) return this.NotFound();
 
-        var identityPrototype = new IdentityPrototype(externalIdentity.Id, externalIdentity.DisplayName);
+        var tenantPrototype = new TenantPrototype(Name: GenerateTenantName(externalIdentity.PrincipalName), IsSystem: true);
+        var createTenant = await this._tenantService.CreateAsync(tenantPrototype, cancellationToken);
+        if (!createTenant.IsSuccessful) return this.Error(createTenant);
+
+        var identityPrototype = new IdentityPrototype(externalIdentity.Id, createTenant.Data.EntityId, externalIdentity.DisplayName);
         var createUser = await this._identityService.CreateAsync(identityPrototype, cancellationToken);
         if (!createUser.IsSuccessful) return this.Error(createUser);
 
         return this.Ok();
     }
+
+    private static string GenerateTenantName(string principalName) => $"{principalName}-{Guid.NewGuid()}";
 }

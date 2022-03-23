@@ -6,7 +6,7 @@ using SiT.Scheduler.Core.Contracts.OperativeModels.Layouts;
 public interface IAuthenticationContext
 {
     bool IsAuthenticated { get; }
-    IIdentityAuthenticationLayout Identity { get; }
+    IIdentityContextualLayout Identity { get; }
 
-    void Authenticate([NotNull] IIdentityAuthenticationLayout identity);
+    void Authenticate([NotNull] IIdentityContextualLayout identity);
 }

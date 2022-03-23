@@ -9,5 +9,5 @@ public class Identity : IEntity
     public Guid Id { get; set;  }
     public string DisplayName { get; set; }
 
-    public ICollection<Tenant> Tenants { get; set; }
+    public ICollection<Tenant> Tenants { get; set; } = new List<Tenant>();
 }

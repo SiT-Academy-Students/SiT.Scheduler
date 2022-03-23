@@ -33,15 +33,19 @@ public static class ServicesConfigurationExtensions
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IPerformerService, PerformerService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ITenantService, TenantService>();
         services.AddTransient<IDataTransformerFactory, DataTransformerFactory>();
         services.AddTransient<IDependenciesAccessor, DependenciesAccessor>();
         services.AddSingleton<IDataTransformer<Song, ISongLayout>, SongLayoutTransformer>();
         services.AddSingleton<IDataTransformer<Genre, IGenreMinifiedLayout>, GenreMinifiedLayoutTransformer>();
         services.AddSingleton<IDataTransformer<Performer, IPerformerMinifiedLayout>, PerformerMinifiedLayoutTransformer>();
         services.AddSingleton<IDataTransformer<Category, ICategoryMinifiedLayout>, CategoryMinifiedLayoutTransformer>();
+        services.AddSingleton<IDataTransformer<Identity, IIdentityContextualLayout>, IdentityContextualLayoutTransformer>();
         services.AddSingleton<IDataTransformer<Identity, IIdentityAuthenticationLayout>, IdentityAuthenticationLayoutTransformer>();
+        services.AddSingleton<IDataTransformer<Tenant, ITenantContextualLayout>, TenantContextualLayoutTransformer>();
 
         services.AddScoped<IAuthenticationContext, AuthenticationContext>();
+        services.AddScoped<ITenantContext, TenantContext>();
 
         // Register all repositories.
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

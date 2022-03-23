@@ -55,8 +55,16 @@ public class AuthenticationContextMiddleware
         var identity = getIdentity.Data;
         if (identity is null) return "User not found";
 
+        if (!identity.Tenants.Any()) return "User has no tenants";
+        if (identity.Tenants.Count > 1) return "User has more than one tenant";
+        var tenant = identity.Tenants.Single();
+
         var authenticationContext = httpContext.RequestServices.GetRequiredService<IAuthenticationContext>();
-        authenticationContext.Authenticate(identity);
+        var tenantContext = httpContext.RequestServices.GetRequiredService<ITenantContext>();
+
+        authenticationContext.Authenticate(identity.ContextualLayout);
+        tenantContext.SetTenant(tenant);
+
         return string.Empty;
     }
 }
