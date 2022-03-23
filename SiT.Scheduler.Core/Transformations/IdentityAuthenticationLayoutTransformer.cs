@@ -21,11 +21,5 @@ public class IdentityAuthenticationLayoutTransformer : IDataTransformer<Identity
         this._tenantLayoutTransformer = tenantLayoutTransformer ?? throw new ArgumentNullException(nameof(tenantLayoutTransformer));
     }
 
-    public Expression<Func<Identity, IIdentityAuthenticationLayout>> Projection => this.BuildProjection();
-
-    private Expression<Func<Identity, IIdentityAuthenticationLayout>> BuildProjection()
-    {
-        // return i => new IdentityContextualLayout(i.Id, new IdentityAuthenticationLayout(i.Id), i.Tenants.Project(this._tenantLayoutTransformer));
-        return i => new IdentityAuthenticationLayout(i.Id, i.Project(this._authenticationLayoutTransformer), i.Tenants.Project(this._tenantLayoutTransformer));
-    }
+    public Expression<Func<Identity, IIdentityAuthenticationLayout>> Projection => i => new IdentityAuthenticationLayout(i.Id, i.Project(this._authenticationLayoutTransformer), i.Tenants.Project(this._tenantLayoutTransformer));
 }
