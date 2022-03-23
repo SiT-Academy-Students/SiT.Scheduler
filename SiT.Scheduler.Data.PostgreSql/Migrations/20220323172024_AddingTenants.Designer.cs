@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SiT.Scheduler.Data.PostgreSql;
@@ -11,9 +12,10 @@ using SiT.Scheduler.Data.PostgreSql;
 namespace SiT.Scheduler.Data.PostgreSql.Migrations
 {
     [DbContext(typeof(PostgreSchedulerDbContext))]
-    partial class PostgreSchedulerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220323172024_AddingTenants")]
+    partial class AddingTenants
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
