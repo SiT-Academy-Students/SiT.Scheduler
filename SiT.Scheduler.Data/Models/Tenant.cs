@@ -12,4 +12,7 @@ public class Tenant : IEntity
 
     public ICollection<Identity> Identities { get; set; } = new List<Identity>();
     public ICollection<Category> Categories { get; set; } = new List<Category>();
+    public ICollection<Genre> Genres { get; set; } = new List<Genre>();
+    public ICollection<Performer> Performers { get; set; } = new List<Performer>();
+    public ICollection<Song> Songs { get; set; } = new List<Song>();
 }
