@@ -45,6 +45,24 @@ public class Repository<TEntity> : IRepository<TEntity>
         return operationResult;
     }
 
+    public async Task<IOperationResult<bool>> AnyAsync(IEnumerable<Expression<Func<TEntity, bool>>> filters, CancellationToken cancellationToken)
+    {
+        var operationResult = new OperationResult<bool>();
+
+        try
+        {
+            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).AnyAsync(cancellationToken);
+            operationResult.Data = result;
+        }
+        catch (Exception e)
+        {
+            var error = new ErrorFromException(e);
+            operationResult.AddError(error);
+        }
+
+        return operationResult;
+    }
+
     public async Task<IOperationResult<TEntity>> GetAsync(IEnumerable<Expression<Func<TEntity, bool>>> filters, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult<TEntity>();
