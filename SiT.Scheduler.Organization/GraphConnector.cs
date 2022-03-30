@@ -28,8 +28,8 @@ public class GraphConnector : IGraphConnector
 
         try
         {
-            var user = await this._graphServiceClient.Users[userId.ToString()].Request().Select(x => new { x.DisplayName, x.Id }).GetAsync(cancellationToken);
-            operationResult.Data = new ExternalIdentity(userId, user.DisplayName);
+            var user = await this._graphServiceClient.Users[userId.ToString()].Request().Select(x => new { x.UserPrincipalName, x.DisplayName, x.Id }).GetAsync(cancellationToken);
+            operationResult.Data = new ExternalIdentity(userId, user.DisplayName, user.UserPrincipalName);
         }
         catch (Exception e)
         {

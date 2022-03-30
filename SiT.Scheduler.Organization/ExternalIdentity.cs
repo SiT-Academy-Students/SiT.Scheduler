@@ -2,4 +2,4 @@
 
 using SiT.Scheduler.Organization.Contracts;
 
-public record ExternalIdentity(Guid Id, string DisplayName) : IExternalIdentity;
+public record ExternalIdentity(Guid Id, string DisplayName, string PrincipalName) : IExternalIdentity;

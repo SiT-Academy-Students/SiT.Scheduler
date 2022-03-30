@@ -9,9 +9,9 @@ public class AuthenticationContext : IAuthenticationContext
     private readonly object _lockObj = new();
 
     public bool IsAuthenticated { get; private set; }
-    public IIdentityAuthenticationLayout Identity { get; private set; }
+    public IIdentityContextualLayout Identity { get; private set; }
 
-    public void Authenticate(IIdentityAuthenticationLayout identity)
+    public void Authenticate(IIdentityContextualLayout identity)
     {
         lock (this._lockObj)
         {

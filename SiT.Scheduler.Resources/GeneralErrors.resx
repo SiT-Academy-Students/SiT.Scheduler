@@ -135,4 +135,7 @@
   <data name="WrongFormat" xml:space="preserve">
     <value>The argument is in wrong format.</value>
   </data>
+  <data name="MissingTenantContext" xml:space="preserve">
+      <value>A tenant context is missing.</value>
+  </data>
 </root>

@@ -4,4 +4,5 @@ public interface IExternalIdentity
 {
     Guid Id { get; }
     string DisplayName { get; }
+    string PrincipalName { get; }
 }
