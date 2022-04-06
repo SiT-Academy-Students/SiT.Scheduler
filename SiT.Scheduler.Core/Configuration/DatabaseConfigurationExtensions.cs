@@ -23,6 +23,6 @@ public static class DatabaseConfigurationExtensions
     {
         if (services is null) throw new ArgumentNullException(nameof(services));
 
-        services.AddDbContext<SchedulerDbContext, PostgreSchedulerDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<DbContext, PostgreSchedulerDbContext>(options => options.UseNpgsql(connectionString));
     }
 }
