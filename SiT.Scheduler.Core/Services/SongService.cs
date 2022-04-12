@@ -1,9 +1,10 @@
 namespace SiT.Scheduler.Core.Services;
+
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using SiT.Scheduler.Core.Contracts.Authentication;
 using SiT.Scheduler.Core.Contracts.OperativeModels.ExternalRequirements;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Prototypes;
 using SiT.Scheduler.Core.Contracts.Services;
@@ -16,14 +17,14 @@ using SiT.Scheduler.Utilities;
 using SiT.Scheduler.Utilities.OperationResults;
 using SiT.Scheduler.Validation.Contracts;
 
-public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongPrototype>, ISongService
+public class SongService : BaseTenantEntityService<Song, IDefaultExternalRequirement, ISongPrototype>, ISongService
 {
     private readonly IGenreService _genreService;
     private readonly IPerformerService _performerService;
     private readonly ICategoryService _categoryService;
 
-    public SongService(IRepository<Song> repository, IGenreService genreService, IPerformerService performerService, ICategoryService categoryService, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory)
-        : base(repository, entityValidatorFactory, dataTransformerFactory)
+    public SongService(IRepository<Song> repository, IGenreService genreService, IPerformerService performerService, ICategoryService categoryService, IEntityValidatorFactory entityValidatorFactory, IDataTransformerFactory dataTransformerFactory, ITenantContext tenantContext)
+        : base(repository, entityValidatorFactory, dataTransformerFactory, tenantContext)
     {
         this._genreService = genreService ?? throw new ArgumentNullException(nameof(genreService));
         this._performerService = performerService ?? throw new ArgumentNullException(nameof(performerService));
@@ -35,6 +36,9 @@ public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongP
     protected override async Task<IOperationResult> ApplyPrototypeAsync(ISongPrototype prototype, Song entity, CancellationToken cancellationToken)
     {
         var operationResult = new OperationResult();
+
+        var basePrototypeApplication = await base.ApplyPrototypeAsync(prototype, entity, cancellationToken);
+        if (!basePrototypeApplication.IsSuccessful) return operationResult.AppendErrors(basePrototypeApplication);
 
         var queryGenresOptions = new QueryEntityOptions<Genre>();
         queryGenresOptions.AddFilter(x => prototype.Genres.Contains(x.Id));
@@ -63,6 +67,4 @@ public class SongService : BaseService<Song, IDefaultExternalRequirement, ISongP
 
         return operationResult;
     }
-
-    protected override OperationResult<Expression<Func<Song, bool>>> ConstructFilter(IDefaultExternalRequirement externalRequirement) => new();
 }

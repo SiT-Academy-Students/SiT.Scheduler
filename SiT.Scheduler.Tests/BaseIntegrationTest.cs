@@ -55,7 +55,7 @@ public abstract class BaseIntegrationTest<TDatabaseProvider> : IDisposable
         return equalizer;
     }
 
-    private TService GetService<TService>()
+    protected TService GetService<TService>()
         where TService : class
     {
         var service = this.ServiceProvider.GetService<TService>();

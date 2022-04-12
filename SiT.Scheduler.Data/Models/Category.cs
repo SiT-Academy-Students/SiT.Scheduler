@@ -4,7 +4,7 @@ using System;
 using SiT.Scheduler.Data.Contracts.Models;
 using System.Collections.Generic;
 
-public class Category : IEntity
+public class Category : IEntity, ITenantEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

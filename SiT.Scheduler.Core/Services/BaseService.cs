@@ -34,6 +34,23 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         this._dataTransformerFactory = dataTransformerFactory ?? throw new ArgumentNullException(nameof(dataTransformerFactory));
     }
 
+    public async Task<IOperationResult<bool>> AnyAsync(TExternalRequirement externalRequirement, CancellationToken cancellationToken, IQueryEntityOptions<TEntity> options = null)
+    {
+        var operationResult = new OperationResult<bool>();
+        operationResult.ValidateNotNull(externalRequirement);
+        if (!operationResult.IsSuccessful) return operationResult;
+
+        var constructStandardFilters = this.ConstructStandardFilters(externalRequirement, options);
+        if (!constructStandardFilters.IsSuccessful) return operationResult.AppendErrors(constructStandardFilters);
+
+        var allFilters = constructStandardFilters.Data;
+        var anyEntityMatches = await this._repository.AnyAsync(allFilters, cancellationToken);
+        if (!anyEntityMatches.IsSuccessful) return operationResult.AppendErrors(anyEntityMatches);
+
+        operationResult.Data = anyEntityMatches.Data;
+        return operationResult;
+    }
+
     public Task<IOperationResult<TLayout>> GetAsync<TLayout>(TExternalRequirement externalRequirement, Guid id, CancellationToken cancellationToken, IQueryEntityOptions<TEntity> options = null)
         => this.GetInternallyAsync(
             externalRequirement,
@@ -168,15 +185,11 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         operationResult.ValidateNotDefault(id);
         if (!operationResult.IsSuccessful) return operationResult;
 
-        var constructExternalRequirementFilter = this.ConstructFilter(externalRequirement);
-        if (!constructExternalRequirementFilter.IsSuccessful) return operationResult.AppendErrors(constructExternalRequirementFilter);
+        var constructStandardFilters = this.ConstructStandardFilters(externalRequirement, options);
+        if (!constructStandardFilters.IsSuccessful) return operationResult.AppendErrors(constructStandardFilters);
 
         var idFilter = ConstructIdFilter(id);
-        var externalRequirementFilter = constructExternalRequirementFilter.Data;
-        var optionsFilters = (options?.AdditionalFilters).OrEmptyIfNull().IgnoreNullValues();
-
-        var allFilters = new List<Expression<Func<TEntity, bool>>> { idFilter, externalRequirementFilter };
-        allFilters.AddRange(optionsFilters);
+        var allFilters = constructStandardFilters.Data.ConcatenateWith(idFilter);
 
         var getResult = await getEntities(allFilters);
         if (!getResult.IsSuccessful) return operationResult.AppendErrors(getResult);
@@ -194,19 +207,30 @@ public abstract class BaseService<TEntity, TExternalRequirement, TPrototype> : I
         operationResult.ValidateNotNull(externalRequirement);
         if (!operationResult.IsSuccessful) return operationResult;
 
+        var constructStandardFilters = this.ConstructStandardFilters(externalRequirement, options);
+        if (!constructStandardFilters.IsSuccessful) return operationResult.AppendErrors(constructStandardFilters);
+
+        var allFilters = constructStandardFilters.Data;
+        var getResult = await getEntities(allFilters);
+        if (!getResult.IsSuccessful) return operationResult.AppendErrors(getResult);
+
+        operationResult.Data = getResult.Data.OrEmptyIfNull();
+        return operationResult;
+    }
+
+    private IOperationResult<IEnumerable<Expression<Func<TEntity, bool>>>> ConstructStandardFilters(TExternalRequirement externalRequirement, IQueryEntityOptions<TEntity> options)
+    {
+        var operationResult = new OperationResult<IEnumerable<Expression<Func<TEntity, bool>>>>();
+        operationResult.ValidateNotNull(externalRequirement);
+        if (!operationResult.IsSuccessful) return operationResult;
+
         var constructExternalRequirementFilter = this.ConstructFilter(externalRequirement);
         if (!constructExternalRequirementFilter.IsSuccessful) return operationResult.AppendErrors(constructExternalRequirementFilter);
 
         var externalRequirementFilter = constructExternalRequirementFilter.Data;
         var optionsFilters = (options?.AdditionalFilters).OrEmptyIfNull().IgnoreNullValues();
 
-        var allFilters = new List<Expression<Func<TEntity, bool>>> { externalRequirementFilter };
-        allFilters.AddRange(optionsFilters);
-
-        var getResult = await getEntities(allFilters);
-        if (!getResult.IsSuccessful) return operationResult.AppendErrors(getResult);
-
-        operationResult.Data = getResult.Data.OrEmptyIfNull();
+        operationResult.Data = externalRequirementFilter.ConcatenateWith(optionsFilters);
         return operationResult;
     }
 }

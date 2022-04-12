@@ -7,8 +7,12 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SiT.Scheduler.API.Extensions;
+using SiT.Scheduler.API.ViewModels.Identity;
 using SiT.Scheduler.Core.Contracts.Services;
+using SiT.Scheduler.Core.OperativeModels.ExternalRequirements;
 using SiT.Scheduler.Core.OperativeModels.Prototype;
+using SiT.Scheduler.Core.Options;
+using SiT.Scheduler.Data.Models;
 using SiT.Scheduler.Organization.Contracts;
 
 [ApiController]
@@ -35,6 +39,12 @@ public class IdentityController : ControllerBase
     [HttpPost("ensure")]
     public async Task<IActionResult> EnsureAsync(Guid userId, CancellationToken cancellationToken)
     {
+        var entityExistsOptions = new QueryEntityOptions<Identity>();
+        entityExistsOptions.AddFilter(i => i.Id == userId);
+        var entityExists = await this._identityService.AnyAsync(ExternalRequirement.Default, cancellationToken, options: entityExistsOptions);
+        if (!entityExists.IsSuccessful) return this.Error(entityExists);
+        if (entityExists.Data) return this.Conflict();
+
         var getExternalUser = await this._graphConnector.GetExternalIdentityAsync(userId, cancellationToken);
         if (!getExternalUser.IsSuccessful) return this.Error(getExternalUser);
 
@@ -49,7 +59,8 @@ public class IdentityController : ControllerBase
         var createUser = await this._identityService.CreateAsync(identityPrototype, cancellationToken);
         if (!createUser.IsSuccessful) return this.Error(createUser);
 
-        return this.Ok();
+        var identityEnsuredViewModel = new IdentityEnsuredViewModel { TenantId = createTenant.Data.EntityId, IdentityId = createUser.Data.EntityId };
+        return this.Ok(identityEnsuredViewModel);
     }
 
     private static string GenerateTenantName(string principalName) => $"{principalName}-{Guid.NewGuid()}";

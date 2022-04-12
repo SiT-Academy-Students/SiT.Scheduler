@@ -1,6 +1,11 @@
 namespace SiT.Scheduler.Data;
 
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using SiT.Scheduler.Data.Contracts.Models;
 using SiT.Scheduler.Data.Models;
 
 public class SchedulerDbContext : DbContext
@@ -36,7 +41,16 @@ public class SchedulerDbContext : DbContext
         modelBuilder.Entity<Tenant>().HasMany(t => t.Identities).WithMany(i => i.Tenants);
         modelBuilder.Entity<Identity>().HasMany(i => i.Tenants).WithMany(t => t.Identities);
 
-        modelBuilder.Entity<Tenant>().HasMany(t => t.Categories).WithOne(c => c.Tenant).HasForeignKey(c => c.TenantId);
-        modelBuilder.Entity<Category>().HasOne(c => c.Tenant).WithMany(t => t.Categories).HasForeignKey(c => c.TenantId);
+        DefineTenantRelationship(modelBuilder, t => t.Categories);
+        DefineTenantRelationship(modelBuilder, t => t.Genres);
+        DefineTenantRelationship(modelBuilder, t => t.Performers);
+        DefineTenantRelationship(modelBuilder, t => t.Songs);
+    }
+
+    private static void DefineTenantRelationship<TEntity>([NotNull] ModelBuilder modelBuilder, Expression<Func<Tenant, IEnumerable<TEntity>>> navigationProperty)
+        where TEntity : class, ITenantEntity
+    {
+        modelBuilder.Entity<Tenant>().HasMany(navigationProperty).WithOne(c => c.Tenant).HasForeignKey(c => c.TenantId);
+        modelBuilder.Entity<TEntity>().HasOne(c => c.Tenant).WithMany(navigationProperty).HasForeignKey(c => c.TenantId);
     }
 }

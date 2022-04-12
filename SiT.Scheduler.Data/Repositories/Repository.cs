@@ -16,11 +16,11 @@ using SiT.Scheduler.Utilities.OperationResults;
 public class Repository<TEntity> : IRepository<TEntity>
     where TEntity : class, IEntity
 {
-    private readonly SchedulerDbContext _schedulerDbContext;
+    private readonly DbContext _dbContext;
 
-    public Repository(SchedulerDbContext schedulerDbContext)
+    public Repository(DbContext schedulerDbContext)
     {
-        this._schedulerDbContext = schedulerDbContext ?? throw new ArgumentNullException(nameof(schedulerDbContext));
+        this._dbContext = schedulerDbContext ?? throw new ArgumentNullException(nameof(schedulerDbContext));
     }
 
     public async Task<IOperationResult> CreateAsync(TEntity entity, CancellationToken cancellationToken)
@@ -33,8 +33,26 @@ public class Repository<TEntity> : IRepository<TEntity>
 
         try
         {
-            await this._schedulerDbContext.AddAsync(entity, cancellationToken);
-            await this._schedulerDbContext.SaveChangesAsync(cancellationToken);
+            await this._dbContext.AddAsync(entity, cancellationToken);
+            await this._dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            var error = new ErrorFromException(e);
+            operationResult.AddError(error);
+        }
+
+        return operationResult;
+    }
+
+    public async Task<IOperationResult<bool>> AnyAsync(IEnumerable<Expression<Func<TEntity, bool>>> filters, CancellationToken cancellationToken)
+    {
+        var operationResult = new OperationResult<bool>();
+
+        try
+        {
+            var result = await this._dbContext.Set<TEntity>().Filter(filters).AnyAsync(cancellationToken);
+            operationResult.Data = result;
         }
         catch (Exception e)
         {
@@ -51,7 +69,7 @@ public class Repository<TEntity> : IRepository<TEntity>
 
         try
         {
-            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).FirstOrDefaultAsync(cancellationToken);
+            var result = await this._dbContext.Set<TEntity>().Filter(filters).FirstOrDefaultAsync(cancellationToken);
             operationResult.Data = result;
         }
         catch (Exception e)
@@ -69,7 +87,7 @@ public class Repository<TEntity> : IRepository<TEntity>
 
         try
         {
-            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).Select(projection).FirstOrDefaultAsync(cancellationToken);
+            var result = await this._dbContext.Set<TEntity>().Filter(filters).Select(projection).FirstOrDefaultAsync(cancellationToken);
             operationResult.Data = result;
         }
 
@@ -88,7 +106,7 @@ public class Repository<TEntity> : IRepository<TEntity>
 
         try
         {
-            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).ToListAsync(cancellationToken);
+            var result = await this._dbContext.Set<TEntity>().Filter(filters).ToListAsync(cancellationToken);
             operationResult.Data = result;
         }
         catch (Exception e)
@@ -106,7 +124,7 @@ public class Repository<TEntity> : IRepository<TEntity>
 
         try
         {
-            var result = await this._schedulerDbContext.Set<TEntity>().Filter(filters).Select(projection).ToListAsync(cancellationToken);
+            var result = await this._dbContext.Set<TEntity>().Filter(filters).Select(projection).ToListAsync(cancellationToken);
             operationResult.Data = result;
         }
 
@@ -129,12 +147,12 @@ public class Repository<TEntity> : IRepository<TEntity>
 
         try
         {
-            var trackedEntity = this._schedulerDbContext.Set<TEntity>().Local.FirstOrDefault(x => x.Id == entity.Id);
-            if (trackedEntity != null) this._schedulerDbContext.Entry(trackedEntity).State = EntityState.Detached;
-            this._schedulerDbContext.Entry(entity).State = EntityState.Modified;
+            var trackedEntity = this._dbContext.Set<TEntity>().Local.FirstOrDefault(x => x.Id == entity.Id);
+            if (trackedEntity != null) this._dbContext.Entry(trackedEntity).State = EntityState.Detached;
+            this._dbContext.Entry(entity).State = EntityState.Modified;
 
-            this._schedulerDbContext.Update(entity);
-            await this._schedulerDbContext.SaveChangesAsync(cancellationToken);
+            this._dbContext.Update(entity);
+            await this._dbContext.SaveChangesAsync(cancellationToken);
         }
         catch (Exception e)
         {

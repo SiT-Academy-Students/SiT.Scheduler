@@ -23,6 +23,8 @@ public abstract class BaseRepositoryTest<TEntity, TDatabaseProvider> : BaseInteg
     {
     }
 
+    private IRepository<TEntity> Repository => this.GetService<IRepository<TEntity>>();
+
     [Fact]
     public async Task CreateShouldWorkCorrectly()
     {
@@ -56,6 +58,5 @@ public abstract class BaseRepositoryTest<TEntity, TDatabaseProvider> : BaseInteg
         this.Equalizer.AssertEquality(updatedEntity, getEntity.Data);
     }
 
-    protected abstract IRepository<TEntity> Repository { get; }
     protected abstract TEntity PrepareEntity(params IRandomizationRule<TEntity>[] overridenRules);
 }

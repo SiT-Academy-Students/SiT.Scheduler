@@ -28,4 +28,13 @@ public static class CollectionExtensions
     }
 
     public static IEnumerable<T> AsEnumerable<T>(this T value) => new [] { value };
+
+    public static IEnumerable<T> ConcatenateWith<T>(this IEnumerable<T> a, IEnumerable<T> b)
+    {
+        foreach (var element in a.OrEmptyIfNull()) yield return element;
+        foreach (var element in b.OrEmptyIfNull()) yield return element;
+    }
+
+    public static IEnumerable<T> ConcatenateWith<T>(this T value, IEnumerable<T> collection) => value.AsEnumerable().ConcatenateWith(collection);
+    public static IEnumerable<T> ConcatenateWith<T>(this IEnumerable<T> collection, T value) => collection.ConcatenateWith(value.AsEnumerable());
 }
