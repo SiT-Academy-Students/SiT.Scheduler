@@ -3,4 +3,4 @@
 using System;
 using SiT.Scheduler.Core.Contracts.OperativeModels.Prototypes;
 
-public record IdentityPrototype(Guid Id, Guid TenantId, string DisplayName) : IIdentityPrototype;
+public record IdentityPrototype(Guid ExternalId, Guid TenantId, string DisplayName) : IIdentityPrototype;

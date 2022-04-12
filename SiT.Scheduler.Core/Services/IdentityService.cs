@@ -1,4 +1,4 @@
-﻿namespace SiT.Scheduler.Core.Services;
+namespace SiT.Scheduler.Core.Services;
 
 using System;
 using System.Linq.Expressions;
@@ -38,7 +38,7 @@ public class IdentityService : BaseService<Identity, IDefaultExternalRequirement
         operationResult.ValidateNotNull(tenant);
         if (!operationResult.IsSuccessful) return operationResult;
 
-        entity.Id = prototype.Id;
+        entity.ExternalId = prototype.ExternalId;
         entity.DisplayName = prototype.DisplayName;
         entity.Tenants.Add(tenant);
 

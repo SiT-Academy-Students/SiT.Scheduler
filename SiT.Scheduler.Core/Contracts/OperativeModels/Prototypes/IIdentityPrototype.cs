@@ -4,7 +4,7 @@ using System;
 
 public interface IIdentityPrototype
 {
-    Guid Id { get; }
+    Guid ExternalId { get; }
     Guid TenantId { get; }
     string DisplayName { get; }
 }
