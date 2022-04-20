@@ -1,4 +1,4 @@
-﻿namespace SiT.Scheduler.API.Controllers;
+namespace SiT.Scheduler.API.Controllers;
 
 using System;
 using System.Threading;
@@ -37,10 +37,10 @@ public class IdentityController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("ensure")]
-    public async Task<IActionResult> EnsureAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> EnsureAsync([FromQuery] Guid userId, CancellationToken cancellationToken)
     {
         var entityExistsOptions = new QueryEntityOptions<Identity>();
-        entityExistsOptions.AddFilter(i => i.Id == userId);
+        entityExistsOptions.AddFilter(i => i.ExternalId == userId);
         var entityExists = await this._identityService.AnyAsync(ExternalRequirement.Default, cancellationToken, options: entityExistsOptions);
         if (!entityExists.IsSuccessful) return this.Error(entityExists);
         if (entityExists.Data) return this.Conflict();

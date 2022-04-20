@@ -1,4 +1,4 @@
-﻿namespace SiT.Scheduler.API.Middlewares;
+namespace SiT.Scheduler.API.Middlewares;
 
 using System;
 using System.Linq;
@@ -49,7 +49,7 @@ public class AuthenticationContextMiddleware
     private static async Task<string> AuthenticateUserInternallyAsync(HttpContext httpContext, Guid userId)
     {
         var identityService = httpContext.RequestServices.GetRequiredService<IIdentityService>();
-        var getIdentity = await identityService.GetAsync<IIdentityAuthenticationLayout>(ExternalRequirement.Default, userId, httpContext.RequestAborted);
+        var getIdentity = await identityService.GetByExternalIdAsync<IIdentityAuthenticationLayout>(ExternalRequirement.Default, userId, httpContext.RequestAborted);
         if (!getIdentity.IsSuccessful) return getIdentity.ExtractErrors();
 
         var identity = getIdentity.Data;

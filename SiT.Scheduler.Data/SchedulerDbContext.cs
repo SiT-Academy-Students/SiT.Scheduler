@@ -41,6 +41,8 @@ public class SchedulerDbContext : DbContext
         modelBuilder.Entity<Tenant>().HasMany(t => t.Identities).WithMany(i => i.Tenants);
         modelBuilder.Entity<Identity>().HasMany(i => i.Tenants).WithMany(t => t.Identities);
 
+        modelBuilder.Entity<Identity>().HasIndex(i => i.ExternalId).IsUnique();
+
         DefineTenantRelationship(modelBuilder, t => t.Categories);
         DefineTenantRelationship(modelBuilder, t => t.Genres);
         DefineTenantRelationship(modelBuilder, t => t.Performers);
