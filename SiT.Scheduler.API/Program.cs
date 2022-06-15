@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -7,11 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using SiT.Scheduler.API.Configuration;
+using SiT.Scheduler.API.Configuration.Models;
 using SiT.Scheduler.API.Middlewares;
 using SiT.Scheduler.Core.Configuration;
 using SiT.Scheduler.Data.Configuration;
 using SiT.Scheduler.Organization.Configuration;
 using SiT.Scheduler.StorageManagement.Configuration;
+using SiT.Scheduler.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.local.json", optional: true);
@@ -24,6 +27,17 @@ builder.Services.Configure<FormOptions>(
 var b2cSection = builder.Configuration.GetSection("AzureAdB2C");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(b2cSection);
+
+var corsConfiguration = builder.Configuration.GetSection("CORS").Get<CorsConfiguration>();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policyBuilder =>
+    {
+        policyBuilder.WithHeaders(corsConfiguration.AllowedHeaders.OrEmptyIfNull().IgnoreNullValues().ToArray());
+        policyBuilder.WithMethods(corsConfiguration.AllowedMethods.OrEmptyIfNull().IgnoreNullValues().ToArray());
+        policyBuilder.WithOrigins(corsConfiguration.AllowedOrigins.OrEmptyIfNull().IgnoreNullValues().ToArray());
+    });
+});
 
 builder.Services.AddAuthorization(
     options =>
@@ -66,6 +80,7 @@ else
     app.UseHttpsRedirection();
 }
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAuthenticationContext();
